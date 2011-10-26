@@ -5,12 +5,11 @@
 
 class Cc():
     
-    def __init__(self,code,parent):
+    def __init__(self,code):
         self.code = code
-        self.parent = parent
-        
+                
     def __repr__(self):
-        return 'Cc: %s - %s ' % (self.code, self.parent) 
+        return 'Cc: %s' % (self.code) 
     
     
 
@@ -22,4 +21,25 @@ class Eotp():
         
     def __repr__(self):
         return 'Eotp: %s - %s' % (self.code, self.cc)
+    
+    
+
+class Fund():
+    
+    def __init__(self,code,desc):
+        self.code = code
+        self.desc = desc
+        
+    def __repr__(self):
+        return 'Fund: %s - %s' % (self.code, self.desc)    
+    
+    
+class FuncDom():
+    
+    def __init__(self,code,desc):
+        self.code = code
+        self.desc = desc
+        
+    def __repr__(self):
+        return 'FuncDom: %s - %s' % (self.code, self.desc)    
     
