@@ -29,7 +29,7 @@ class SifacUDSMiddleware(object):
             list_sifac_df = [] 
                                    
             conn = saprfc.conn(ashost=settings.ASHOST, sysnr=settings.SYSNR, client=settings.CLIENT,
-                   user=settings.USER, passwd=settings.PASSWF, trace=1)
+                   user=settings.USER, passwd=settings.PASSWF, trace=0)
             
             try:
             
