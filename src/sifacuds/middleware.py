@@ -36,7 +36,6 @@ class SifacUDSMiddleware(object):
                 # CC
                 iface = conn.discover("RFC_READ_TABLE")
                 iface.query_table.setValue("FMHISV")
-                iface.ROWCOUNT.setValue(50)
                 iface.FIELDS.setValue(["FISTL","PARENT_ST"])
                 iface.OPTIONS.setValue( ["PARENT_ST = 'PAIE'"] )
         
@@ -50,24 +49,26 @@ class SifacUDSMiddleware(object):
                 # EOTP
                 iface2 = conn.discover("RFC_READ_TABLE")
                 iface2.query_table.setValue("PRPS")
-                iface2.ROWCOUNT.setValue(10)
                 iface2.FIELDS.setValue(["POSID","FKSTL"])
         
                 conn.callrfc( iface2 )
                               
                 for x2 in iface2.DATA.value:
                     res2 = x2.split()
-                    eotp = Eotp(res2[0],res2[1])
-                    list_sifac_eotp.append(eotp)
-                    
-                    
+                    if len(res2) == 2:
+                        eotp = Eotp(res2[0],res2[1])
+                        list_sifac_eotp.append(eotp)
+                
                 request.session['sifac_cc'] = list_sifac_cc        
-                request.session['sifac_eotp'] = list_sifac_eotp
+                request.session['sifac_eotp'] = list_sifac_eotp    
                 
             except Exception:
                 pass
             
             finally:
-                conn.close() 
+                conn.close()
+                
+                
+                
             
             
