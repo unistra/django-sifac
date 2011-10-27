@@ -25,8 +25,8 @@ class SifacUDSMiddleware(object):
             
             list_sifac_cc = []   
             list_sifac_eotp = []              
-            list_sifac_fund = []   
-            list_sifac_df = [] 
+            dict_sifac_fund = {}   
+            dict_sifac_df = {}
                                    
             conn = saprfc.conn(ashost=settings.ASHOST, sysnr=settings.SYSNR, client=settings.CLIENT,
                    user=settings.USER, passwd=settings.PASSWF, trace=0)
@@ -62,8 +62,7 @@ class SifacUDSMiddleware(object):
                         list_sifac_eotp.append(eotp)
                         
                         
-                ##################################################### FUND
-                
+                ##################################################### FUND                
                 iface3 = conn.discover("RFC_READ_TABLE")
                 iface3.query_table.setValue("FMFINT")
                 iface3.FIELDS.setValue(["FINCODE","BEZEICH"])
@@ -71,11 +70,12 @@ class SifacUDSMiddleware(object):
                 conn.callrfc( iface3 )
                 
                 for x in iface3.DATA.value:
-                    end_cod_ind = x.find(' ')                    
-                    fund = Fund(x[0:end_cod_ind], x.decode("iso-8859-15"))
-                    list_sifac_fund.append(fund)
+                    x_split = x.split()
+                    code = x_split[0]
+                    fund = Fund(code, ' '.join(x_split).decode("iso-8859-15"))
+                    dict_sifac_fund[code] = fund
                     
-                ##################################################### DF    
+                ##################################################### DF
                 iface4 = conn.discover("RFC_READ_TABLE")
                 iface4.query_table.setValue("TFKBT")
                 iface4.FIELDS.setValue(["FKBER","FKBTX"])
@@ -83,15 +83,16 @@ class SifacUDSMiddleware(object):
                 conn.callrfc( iface4 )
                 
                 for x in iface4.DATA.value:
-                    end_cod_ind = x.find(' ')                    
-                    df = FuncDom(x[0:end_cod_ind], x.decode("iso-8859-15"))
-                    list_sifac_df.append(df)                
+                    x_split = x.split()
+                    code = x_split[0]
+                    df = FuncDom(code, ' '.join(x_split).decode("iso-8859-15"))
+                    dict_sifac_df[code] = df                
                         
                 
                 request.session['sifac_cc'] = list_sifac_cc        
                 request.session['sifac_eotp'] = list_sifac_eotp   
-                request.session['sifac_fund'] = list_sifac_fund
-                request.session['sifac_df'] = list_sifac_df
+                request.session['sifac_fund'] = dict_sifac_fund
+                request.session['sifac_df'] = dict_sifac_df
                 
             except Exception:
                 pass
