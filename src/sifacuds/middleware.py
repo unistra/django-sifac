@@ -8,6 +8,7 @@ Middleware to get back informations from sifac
 """
 
 import saprfc
+import re
 from sifacuds.models import Eotp, Cc, Fund, FuncDom
 
 from django.conf import settings
@@ -35,11 +36,11 @@ class SifacUDSMiddleware(object):
             
                 conn.connect()    
         
-                ##################################################### CC
+                ##################################################### CC PAIE{1,2,5,6,7}
                 iface = conn.discover("RFC_READ_TABLE")
                 iface.query_table.setValue("CSKS")
                 iface.FIELDS.setValue(["KOSTL"])
-                iface.OPTIONS.setValue( ["PRCTR LIKE 'PAIE%'"] )
+                iface.OPTIONS.setValue( ["KOSTL LIKE 'PAIE1%'", "OR", "KOSTL LIKE 'PAIE2%'", "OR", "KOSTL LIKE 'PAIE5%'", "OR", "KOSTL LIKE 'PAIE6%'", "OR", "KOSTL LIKE 'PAIE7%'"] )
         
                 conn.callrfc( iface )
                        
@@ -47,6 +48,8 @@ class SifacUDSMiddleware(object):
                     res = x.split()
                     cc = Cc(res[0])
                     list_sifac_cc.append(cc)       
+                    
+                    
         
                 ##################################################### EOTP
                 iface2 = conn.discover("RFC_READ_TABLE")
@@ -62,6 +65,7 @@ class SifacUDSMiddleware(object):
                         list_sifac_eotp.append(eotp)
                         
                         
+                        
                 ##################################################### FUND                
                 iface3 = conn.discover("RFC_READ_TABLE")
                 iface3.query_table.setValue("FMFINT")
@@ -75,7 +79,9 @@ class SifacUDSMiddleware(object):
                     fund = Fund(code, ' '.join(x_split).decode("iso-8859-15"))
                     dict_sifac_fund[code] = fund
                     
-                ##################################################### DF
+                    
+                    
+                ##################################################### DF (code = 3 numbers + 2 chars alpha min)
                 iface4 = conn.discover("RFC_READ_TABLE")
                 iface4.query_table.setValue("TFKBT")
                 iface4.FIELDS.setValue(["FKBER","FKBTX"])
@@ -85,10 +91,16 @@ class SifacUDSMiddleware(object):
                 for x in iface4.DATA.value:
                     x_split = x.split()
                     code = x_split[0]
-                    df = FuncDom(code, ' '.join(x_split).decode("iso-8859-15"))
-                    dict_sifac_df[code] = df                
+                    
+                    p= re.compile('^[0-9]{3}[A-Z]{2}')
+                    m = p.match(code)
+                    if m: 
+                        df = FuncDom(code, ' '.join(x_split).decode("iso-8859-15"))
+                        dict_sifac_df[code] = df                
                         
-                
+                        
+                        
+                ##################################################### ADD SESSION LIST
                 request.session['sifac_cc'] = list_sifac_cc        
                 request.session['sifac_eotp'] = list_sifac_eotp   
                 request.session['sifac_fund'] = dict_sifac_fund
