@@ -36,12 +36,12 @@ class SifacUDSService(object):
     
     
 
-    def getListCostCenterPaie(self):
+    def getDictCostCenterPaie(self):
         
         """ Get list CC PAIE{1,2,5,6,7}
         """
         
-        list_sifac_cc = []                                    
+        dict_sifac_cc = {}                             
             
         try:
             
@@ -57,8 +57,9 @@ class SifacUDSService(object):
                        
             for x in iface.DATA.value:
                 res = x.split()
-                cc = Cc(res[0])
-                list_sifac_cc.append(cc)        
+                code = res[0]
+                cc = Cc(code) 
+                dict_sifac_cc[code] = cc    
                           
         except Exception:
             pass
@@ -66,18 +67,18 @@ class SifacUDSService(object):
         finally:
             self.__closeSifac()
                  
-        return list_sifac_cc    
+        return dict_sifac_cc    
     
     
     
     
     
-    def getListEotp(self):
+    def getDictEotp(self):
         
         """ Get Eotp with a CC
         """
         
-        list_sifac_eotp = []                                 
+        dict_sifac_eotp = {}                          
             
         try:
             
@@ -92,9 +93,11 @@ class SifacUDSService(object):
                               
             for x2 in iface2.DATA.value:
                 res2 = x2.split()
+                code = res2[0]
+                cc = res2[1]
                 if len(res2) == 2:
-                    eotp = Eotp(res2[0],res2[1])
-                    list_sifac_eotp.append(eotp)
+                    eotp = Eotp(code,cc)
+                    dict_sifac_eotp[code] = eotp
                                        
         except Exception:
             pass
@@ -102,7 +105,7 @@ class SifacUDSService(object):
         finally:
             self.__closeSifac()
                 
-        return list_sifac_eotp
+        return dict_sifac_eotp
     
 
 
