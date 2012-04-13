@@ -93,9 +93,9 @@ class SifacUDSService(object):
                               
             for x2 in iface2.DATA.value:
                 res2 = x2.split()
-                code = res2[0]
-                cc = res2[1]
                 if len(res2) == 2:
+                    code = res2[0]
+                    cc = res2[1]
                     eotp = Eotp(code,cc)
                     dict_sifac_eotp[code] = eotp
                                        
