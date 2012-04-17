@@ -9,7 +9,7 @@ sys.path.append(path)
 
 setup(
     name = 'django-sifacuds',
-    version = '0.0.8',
+    version = '0.0.9',
     packages = find_packages('src'),
     package_dir = {'': 'src'},
 

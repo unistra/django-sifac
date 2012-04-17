@@ -51,7 +51,8 @@ class SifacUDSService(object):
             iface = self.__conn.discover("RFC_READ_TABLE")
             iface.query_table.setValue("CSKS")
             iface.FIELDS.setValue(["KOSTL"])
-            iface.OPTIONS.setValue( ["KOSTL LIKE 'PAIE1%'", "OR", "KOSTL LIKE 'PAIE2%'", "OR", "KOSTL LIKE 'PAIE5%'", "OR", "KOSTL LIKE 'PAIE6%'", "OR", "KOSTL LIKE 'PAIE7%'"] )
+            iface.OPTIONS.setValue( ["KOSTL LIKE 'PAIE1%'", "OR", "KOSTL LIKE 'PAIE2%'", "OR", "KOSTL LIKE 'PAIE5%'",
+                "OR", "KOSTL LIKE 'PAIE6%'", "OR", "KOSTL LIKE 'PAIE7%'", "OR", "KOSTL LIKE 'I%2P%D'"] )
         
             self.__conn.callrfc( iface )
                        
