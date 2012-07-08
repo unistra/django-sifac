@@ -3,48 +3,230 @@
 """
 """
 
-class Cc(object):
+import logging
+import re
+
+from .services import SifacUDSService
+
+
+logger = logging.getLogger(__name__)
+
+
+class SifacModel(object):
+    """
+    """
+    _service = SifacUDSService()
+
+    @classmethod
+    def _query_result(cls, *filters):
+        return cls._service.query(cls._table, cls._columns, *filters)
+
+    @classmethod
+    def get_dict(cls, filters=(), pattern=""):
+        raise NotImplementedError()
+
+    @classmethod
+    def get_list(cls, filters=(), pattern=""):
+        raise NotImplementedError()
+
+
+class CostCenter(SifacModel):
     """
     """
 
-    def __init__(self, code):
+    _table = "CSKS"
+    _columns = ["KOSTL"]
+
+    def __init__(self, code, *args, **kwargs):
+        super(CostCenter, self).__init__(*args, **kwargs)
         self.code = code
 
+    @classmethod
+    def get_dict(cls, filters=(), pattern=""):
+        """
+        """
+        cc_dict = {}
+        matcher = re.compile(pattern) if pattern else None
+        for value in cls._query_result(*filters):
+            cost_center_code = value.split()[0]
+            if not matcher or matcher.match(cost_center_code):
+                cc_dict[cost_center_code] = cls(cost_center_code)
+        return cc_dict
+
+    @classmethod
+    def get_list(cls, filters=(), pattern=""):
+        """
+        """
+        cc_list = []
+        matcher = re.compile(pattern) if pattern else None
+        for value in cls._query_result(*filters):
+            cost_center_code = value.split()[0]
+            if not matcher or matcher.match(cost_center_code):
+                cc_list.append(cls(cost_center_code))
+        return cc_list
+
     def __repr__(self):
-        return 'Cc: {0}'.format(self.code)
+        return '<Cost center: {0}>'.format(self.code)
+
+    def __str__(self):
+        return self.code
+
+    def __unicode__(self):
+        return unicode(self.code)
 
 
-class Eotp(object):
+class Eotp(SifacModel):
     """
     """
 
-    def __init__(self, code, cc=None):
+    _table = "PRPS"
+    _columns = ["POSID", "FKSTL"]
+
+    def __init__(self, code, cc=None, *args, **kwargs):
+        super(Eotp, self).__init__(*args, **kwargs)
         self.code = code
         self.cc = cc
 
+    @classmethod
+    def get_dict(cls, filters=(), pattern=""):
+        """
+        """
+        eotp_dict = {}
+        matcher = re.compile(pattern) if pattern else None
+        for value in cls._query_result(*filters):
+            try:
+                eotp_code, cc_code = value.split()
+                if not matcher or matcher.match(eotp_code):
+                    eotp_dict[eotp_code] = cls(eotp_code, cc_code)
+            except Exception as e:
+                print(e)
+                logger.warn("Problem to split returning eotp {0}".format(value))
+        return eotp_dict
+
+    @classmethod
+    def get_list(cls, filters=(), pattern=""):
+        """
+        """
+        eotp_list = []
+        matcher = re.compile(pattern) if pattern else None
+        for value in cls._query_result(*filters):
+            try:
+                eotp_code, cc_code = value.split()
+                if not matcher or matcher.match(eotp_code):
+                    eotp_list.append(cls(eotp_code, cc_code))
+            except:
+                logger.warn("Problem to split returning eotp {0}".format(value))
+        return eotp_list
+
     def __repr__(self):
-        return 'Eotp: {0.code} {1}'.format(self, '- {0.cc}'.format(self)  if self.cc else "")
+        return '<Eotp: {0.code}>'.format(self)
+
+    def __str__(self):
+        return '{0.code}{1}'.format(self, '' if not cc else '({0.cc.code})'.format(self))
+
+    def __unicode__(self):
+        return u'{0.code}{1}'.format(self, '' if not cc else u'({0.cc.code})'.format(self))
 
 
-class Fund(object):
+class Fund(SifacModel):
     """
     """
 
-    def __init__(self, code, desc):
+    _table = "FMFINT"
+    _columns = ["FINCODE", "BEZEICH"]
+
+    def __init__(self, code, description, *args, **kwargs):
+        super(Fund, self).__init__(*args, **kwargs)
         self.code = code
-        self.desc = desc
+        self.description = description
+
+    @classmethod
+    def get_dict(cls, filters=(), pattern=""):
+        """
+        """
+        fund_dict = {}
+        matcher = re.compile(pattern) if pattern else None
+        for value in cls._query_result(*filters):
+            splitted_result = value.split()
+            fund_code = splitted_result[0]
+            if not matcher or matcher.match(fund_code):
+                fund_dict[fund_code] = cls(
+                    fund_code, ''.join(splitted_result[1:]).decode('iso-8859-15')
+                )
+        return fund_dict
+
+    @classmethod
+    def get_list(cls, filters=(), pattern=""):
+        """
+        """
+        fund_list = []
+        matcher = re.compile(pattern) if pattern else None
+        for value in cls._query_result(*filters):
+            splitted_result = value.split()
+            fund_code = splitted_result[0]
+            if not matcher or matcher.match(fund_code):
+                fund_list.append(
+                    cls(fund_code, ''.join(splitted_result[1:]).decode('iso-8859-15'))
+                )
+        return fund_list
 
     def __repr__(self):
-        return 'Fund: {0.code} - {0.desc}'.format(self)
+        return '<Fund: {0.code}>'.format(self)
+
+    def __str__(self):
+        return '{0} - {1}'.format(self.code, self.description.encode('utf-8'))
+
+    def __unicode__(self):
+        return u'{0.code} - {0.description}'.format(self)
 
 
-class FuncDom(object):
+class FunctionalDomain(SifacModel):
     """
     """
 
-    def __init__(self ,code, desc):
+    _table = "TFKBT"
+    _columns = ["FKBER", "FKBTX"]
+
+    def __init__(self, code, description, *args, **kwargs):
+        super(FunctionalDomain, self).__init__(*args, **kwargs)
         self.code = code
-        self.desc = desc
+        self.description = description
+
+    @classmethod
+    def get_dict(cls, filters=(), pattern=""):
+        """
+        """
+        funcdom_dict = {}
+        matcher = re.compile(pattern) if pattern else None
+        for value in cls._query_result(*filters):
+            splitted_result = value.split()
+            functional_domain_code = splitted_result[0]
+            if not matcher or matcher.match(functional_domain_code):
+                funcdom_dict[functional_domain_code] = cls(
+                    fund_code, ''.join(splitted_result[1:]).decode('iso-8859-15')
+                )
+        return funcdom_dict
+
+    @classmethod
+    def get_list(cls, filters=(), pattern=""):
+        """
+        """
+        funcdom_list = []
+        matcher = re.compile(pattern) if pattern else None
+        for value in cls._query_result(*filters):
+            splitted_result = value.split()
+            functional_domain_code = splitted_result[0]
+            if not matcher or matcher.match(functional_domain_code):
+                funcdom_list.append(
+                    cls(functional_domain_code, ''.join(splitted_result[1:]).decode('iso-8859-15'))
+                )
+        return funcdom_list
 
     def __repr__(self):
-        return 'FuncDom: {0.code} - {0.desc}'.format(self)
+        return '<FunctionalDomain: {0.code}>'.format(self)
+
+    def __str__(self):
+        return '{0} - {1}'.format(self.code, self.description.encode('utf-8'))
+
+    def __unicode__(self):
+        return u'{0.code} - {0.description}'.format(self)

@@ -5,7 +5,6 @@ import re
 import saprfc
 from django.conf import settings
 
-from sifacuds.models import Eotp, Cc, Fund, FuncDom
 
 
 logger = logging.getLogger(__name__)
@@ -18,16 +17,17 @@ class SifacUDSService(object):
         """ Init conn attr """
         self.__conn = conn
 
-    def __connectSifac(self):
+    def __connect(self):
         """ Connection to SIFAC """
-        try:
-            self.__conn = saprfc.conn(ashost=settings.ASHOST, sysnr=settings.SYSNR, client=settings.CLIENT,
-                user=settings.USER, passwd=settings.PASSWF, trace=0)
-            self.__conn.connect()
-        except Exception:
-            pass
+        if self.__conn is None:
+            try:
+                self.__conn = saprfc.conn(ashost=settings.ASHOST, sysnr=settings.SYSNR, client=settings.CLIENT,
+                    user=settings.USER, passwd=settings.PASSWF, trace=0)
+                self.__conn.connect()
+            except Exception:
+                pass
 
-    def __closeSifac(self):
+    def __close(self):
         """ Close connection from SIFAC """
         try:
             self.__conn.close()
@@ -35,89 +35,37 @@ class SifacUDSService(object):
         except Exception:
             pass
 
-    def getDictCostCenterPaie(self):
-        """ Get list CC PAIE{1,2,5,6,7}
-        """
-        dict_sifac_cc = {}
 
+    def query(self, table, columns, *filters):
+        """
+        """
         try:
-            if self.__conn is None:
-                self.__connectSifac()
-            # CC
+            self.__connect()
+
             iface = self.__conn.discover("RFC_READ_TABLE")
-            iface.query_table.setValue("CSKS")
-            iface.FIELDS.setValue(["KOSTL"])
-            iface.OPTIONS.setValue( ["KOSTL LIKE 'PAIE1%'", "OR", "KOSTL LIKE 'PAIE2%'", "OR", "KOSTL LIKE 'PAIE5%'",
-                "OR", "KOSTL LIKE 'PAIE6%'", "OR", "KOSTL LIKE 'PAIE7%'", "OR", "KOSTL LIKE 'I%2P%D'"] )
+            iface.query_table.setValue(table)
+            iface.FIELDS.setValue(columns)
+            if filters:
+                query = []
+                for index, filter_ in enumerate(filters):
+                    query.append("{0} LIKE '{1}'".format(columns[0], filter_))
+                    if index < len(filters) - 1:
+                        query.append("OR")
+                iface.OPTIONS.setValue(query)
 
             self.__conn.callrfc( iface )
+            values = iface.DATA.value
 
-            for x in iface.DATA.value:
-                res = x.split()
-                code = res[0]
-                cc = Cc(code)
-                dict_sifac_cc[code] = cc
-
-        except Exception:
+        except Exception as e:
             pass
 
         finally:
-            self.__closeSifac()
+            self.__close()
 
-        return dict_sifac_cc
+        return values
 
-    def getDictEotp(self):
-        """ Get Eotp with a CC
-        """
-        dict_sifac_eotp = {}
-        try:
-            if self.__conn is None:
-                self.__connectSifac()
-            # EOTP
-            iface2 = self.__conn.discover("RFC_READ_TABLE")
-            iface2.query_table.setValue("PRPS")
-            iface2.FIELDS.setValue(["POSID","FKSTL"])
-
-            self.__conn.callrfc( iface2 )
-            for x2 in iface2.DATA.value:
-                try:
-                    eotp = Eotp(*x2.split())
-                    dict_sifac_eotp[eotp.code] = eotp
-                # more than 2 values in splitted string
-                except TypeError:
-                    logger.warn("Problem to split returning eotp : {0}".format(x2))
-        except Exception:
-            pass
-        finally:
-            self.__closeSifac()
-        return dict_sifac_eotp
-
-    def getDictFund(self):
-        """ Get all fund
-        """
-        dict_sifac_fund = {}
-        try:
-            if self.__conn is None:
-                self.__connectSifac()
-            # FUND
-            iface3 = self.__conn.discover("RFC_READ_TABLE")
-            iface3.query_table.setValue("FMFINT")
-            iface3.FIELDS.setValue(["FINCODE","BEZEICH"])
-            self.__conn.callrfc( iface3 )
-            for x in iface3.DATA.value:
-                x_split = x.split()
-                code = x_split[0]
-                fund = Fund(code, ' '.join(x_split).decode("iso-8859-15"))
-                dict_sifac_fund[code] = fund
-        except Exception:
-            pass
-        finally:
-            self.__closeSifac()
-        return dict_sifac_fund
-
+    """
     def getDictFuncDom(self):
-        """ DF (code = 3 numbers + 2 chars alpha min)
-        """
         dict_sifac_df = {}
         try:
             if self.__conn is None: self.__connectSifac()
@@ -139,3 +87,4 @@ class SifacUDSService(object):
         finally:
             self.__closeSifac()
         return dict_sifac_df
+    """

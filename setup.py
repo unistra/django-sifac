@@ -9,7 +9,7 @@ sys.path.append(path)
 
 setup(
     name = 'django-sifacuds',
-    version = '0.1.0',
+    version = '0.2.0',
     packages = find_packages('src'),
     package_dir = {'': 'src'},
 
@@ -18,7 +18,7 @@ setup(
     ],
 
     dependency_links =  [
-        'http://pedago-pg728.u-strasbg.fr/python/snapshots'
+        'http://repodipory.u-strasbg.fr/lib/python'
     ],
 
     author = 'Morgan Bohn',
