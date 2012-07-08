@@ -3,14 +3,14 @@
 import logging
 import re
 import saprfc
-from django.conf import settings
 
+from django.conf import settings
 
 
 logger = logging.getLogger(__name__)
 
 
-class SifacUDSService(object):
+class SifacDB(object):
     """ Services to get information from SIFAC """
 
     def __init__(self, conn = None):

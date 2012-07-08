@@ -6,7 +6,7 @@
 import logging
 import re
 
-from .services import SifacUDSService
+from .db import SifacDB
 
 
 logger = logging.getLogger(__name__)
@@ -15,11 +15,11 @@ logger = logging.getLogger(__name__)
 class SifacModel(object):
     """
     """
-    _service = SifacUDSService()
+    _db_connection = SifacDB()
 
     @classmethod
     def _query_result(cls, *filters):
-        return cls._service.query(cls._table, cls._columns, *filters)
+        return cls._db_connection.query(cls._table, cls._columns, *filters)
 
     @classmethod
     def get_dict(cls, filters=(), pattern=""):
