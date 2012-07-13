@@ -82,10 +82,10 @@ class Eotp(SifacModel):
     _table = "PRPS"
     _columns = ["POSID", "FKSTL"]
 
-    def __init__(self, code, cc=None, *args, **kwargs):
+    def __init__(self, code, cost_center=None, *args, **kwargs):
         super(Eotp, self).__init__(*args, **kwargs)
         self.code = code
-        self.cc = cc
+        self.cost_center = CostCenter(cost_center) if cost_center else None
 
     @classmethod
     def get_dict(cls, filters=(), pattern=""):
@@ -95,12 +95,16 @@ class Eotp(SifacModel):
         matcher = re.compile(pattern) if pattern else None
         for value in cls._query_result(*filters):
             try:
-                eotp_code, cc_code = value.split()
-                if not matcher or matcher.match(eotp_code):
-                    eotp_dict[eotp_code] = cls(eotp_code, cc_code)
-            except Exception as e:
-                print(e)
-                logger.warn("Problem to split returning eotp {0}".format(value))
+                codes = value.split()
+                if len(codes) > 2:
+                    raise Exception()
+                if not matcher or matcher.match(codes[0]):
+                    cost_center_code = codes[1] if len(codes) > 1 else None
+                    eotp_dict[codes[0]] = cls(codes[0], cost_center_code)
+            except:
+                logger.warn(
+                    "Problem to split returning eotp {0}".format(value)
+                )
         return eotp_dict
 
     @classmethod
@@ -111,21 +115,32 @@ class Eotp(SifacModel):
         matcher = re.compile(pattern) if pattern else None
         for value in cls._query_result(*filters):
             try:
-                eotp_code, cc_code = value.split()
-                if not matcher or matcher.match(eotp_code):
-                    eotp_list.append(cls(eotp_code, cc_code))
+                codes = value.split()
+                if len(codes) > 2:
+                    raise Exception()
+                if not matcher or matcher.match(codes[0]):
+                    cost_center_code = codes[1] if len(codes) > 1 else None
+                    eotp_list.append(cls(codes[0], cost_center_code))
             except:
-                logger.warn("Problem to split returning eotp {0}".format(value))
+                logger.warn(
+                    "Problem to split returning eotp {0}".format(value)
+                )
         return eotp_list
 
     def __repr__(self):
         return '<Eotp: {0.code}>'.format(self)
 
     def __str__(self):
-        return '{0.code}{1}'.format(self, '' if not cc else '({0.cc.code})'.format(self))
+        return '{0.code}{1}'.format(
+            self, '' if not self.cost_center else ' ({0.code})'
+                .format(self.cost_center)
+        )
 
     def __unicode__(self):
-        return u'{0.code}{1}'.format(self, '' if not cc else u'({0.cc.code})'.format(self))
+        return u'{0.code}{1}'.format(
+            self, '' if not self.cost_center else u' ({0.code})'
+                .format(self.cost_center)
+        )
 
 
 class Fund(SifacModel):
@@ -151,7 +166,8 @@ class Fund(SifacModel):
             fund_code = splitted_result[0]
             if not matcher or matcher.match(fund_code):
                 fund_dict[fund_code] = cls(
-                    fund_code, ''.join(splitted_result[1:]).decode('iso-8859-15')
+                    fund_code, 
+                    ''.join(splitted_result[1:]).decode('iso-8859-15')
                 )
         return fund_dict
 
@@ -165,9 +181,10 @@ class Fund(SifacModel):
             splitted_result = value.split()
             fund_code = splitted_result[0]
             if not matcher or matcher.match(fund_code):
-                fund_list.append(
-                    cls(fund_code, ''.join(splitted_result[1:]).decode('iso-8859-15'))
-                )
+                fund_list.append(cls(
+                    fund_code, 
+                    ''.join(splitted_result[1:]).decode('iso-8859-15')
+                ))
         return fund_list
 
     def __repr__(self):
@@ -203,7 +220,8 @@ class FunctionalDomain(SifacModel):
             functional_domain_code = splitted_result[0]
             if not matcher or matcher.match(functional_domain_code):
                 funcdom_dict[functional_domain_code] = cls(
-                    functional_domain_code, ''.join(splitted_result[1:]).decode('iso-8859-15')
+                    functional_domain_code,
+                    ''.join(splitted_result[1:]).decode('iso-8859-15')
                 )
         return funcdom_dict
 
@@ -217,9 +235,10 @@ class FunctionalDomain(SifacModel):
             splitted_result = value.split()
             functional_domain_code = splitted_result[0]
             if not matcher or matcher.match(functional_domain_code):
-                funcdom_list.append(
-                    cls(functional_domain_code, ''.join(splitted_result[1:]).decode('iso-8859-15'))
-                )
+                funcdom_list.append(cls(
+                    functional_domain_code, 
+                    ''.join(splitted_result[1:]).decode('iso-8859-15')
+                ))
         return funcdom_list
 
     def __repr__(self):

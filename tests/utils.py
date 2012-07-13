@@ -22,7 +22,7 @@ def fake_db_query(cls, table, columns, *data):
                 filtered_values.append(value)
     if filters:
         data['from_sifac'] = filtered_values
-    return dict(data)['from_sifac']
+    return data['from_sifac']
 
 
 def faking_query(func):

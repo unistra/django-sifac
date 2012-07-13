@@ -2,7 +2,9 @@
 
 """
 """
+
 import unittest
+from itertools import izip
 
 try:
     utils = __import__('utils')
@@ -19,6 +21,8 @@ test_data = (
     {'filters': ('HISTO%', ), 'pattern': 'H[A-Z]{3}.[1-5]',
         'from_sifac': ['LALA1', 'HISTO1', 'HISTO2', 'HISTO6', 'HISTN3'],
         'expected': ['HISTO1', 'HISTO2']},
+    {'filters': ('LALA%1'), 'pattern': '', 'from_sifac': ['HISTO4', 'HISTO5'], 
+        'expected': []},
     {'filters': (), 'pattern': '', 'from_sifac': [], 'expected': []}
 )
 
@@ -35,7 +39,7 @@ class TestCostCenter(unittest.TestCase):
             result = CostCenter.get_list(filters=data.items(), 
                 pattern=data['pattern'])
             self.assertIsInstance(result, type([]))
-            for cost_center, code in zip(result, data['expected']):
+            for cost_center, code in izip(result, data['expected']):
                 self.assertIsInstance(cost_center, CostCenter)
                 self.assertEqual(cost_center.code, code)
 
@@ -54,7 +58,7 @@ class TestCostCenter(unittest.TestCase):
                 self.assertEqual(key_code, code)
 
     def test_printing(self):
-        """
+        """ Test built-in printing functions for cost center model
         """
         cost_center = CostCenter('HISTO3')
         self.assertEqual(str(cost_center), 'HISTO3')
