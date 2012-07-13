@@ -66,7 +66,7 @@ class CostCenter(SifacModel):
         return cc_list
 
     def __repr__(self):
-        return '<Cost center: {0}>'.format(self.code)
+        return '<CostCenter: {0}>'.format(self.code)
 
     def __str__(self):
         return self.code
@@ -203,7 +203,7 @@ class FunctionalDomain(SifacModel):
             functional_domain_code = splitted_result[0]
             if not matcher or matcher.match(functional_domain_code):
                 funcdom_dict[functional_domain_code] = cls(
-                    fund_code, ''.join(splitted_result[1:]).decode('iso-8859-15')
+                    functional_domain_code, ''.join(splitted_result[1:]).decode('iso-8859-15')
                 )
         return funcdom_dict
 
