@@ -167,7 +167,7 @@ class Fund(SifacModel):
             if not matcher or matcher.match(fund_code):
                 fund_dict[fund_code] = cls(
                     fund_code, 
-                    ''.join(splitted_result[1:]).decode('iso-8859-15')
+                    ' '.join(splitted_result[1:]).decode('iso-8859-15')
                 )
         return fund_dict
 
@@ -183,7 +183,7 @@ class Fund(SifacModel):
             if not matcher or matcher.match(fund_code):
                 fund_list.append(cls(
                     fund_code, 
-                    ''.join(splitted_result[1:]).decode('iso-8859-15')
+                    ' '.join(splitted_result[1:]).decode('iso-8859-15')
                 ))
         return fund_list
 
