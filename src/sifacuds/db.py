@@ -6,7 +6,7 @@ import saprfc
 from django.conf import settings
 
 
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
 class SifacDB(object):
@@ -16,7 +16,7 @@ class SifacDB(object):
         """ Init conn attr """
         self.__conn = conn
 
-    def _connect(self):
+    def connect(self):
         """ Connection to SIFAC """
         if self.__conn is None:
             try:
@@ -26,18 +26,21 @@ class SifacDB(object):
                     passwd=settings.PASSWF, trace=0
                 )
                 self.__conn.connect()
-            except Exception as e:
-                logger.critical("Can't connect to Sifac DB: %s" % str(e))
+            except Exception as sifac_exception:
+                LOGGER.critical(
+                    "Can't connect to Sifac DB: {0!s}".format(sifac_exception))
 
-    def _close(self):
+    def close(self):
         """ Close connection from SIFAC """
         try:
             self.__conn.close()
             self.__conn = None
-        except Exception as e:
-            logger.error("Can't close Sifac connection: %s" % str(e))
+        except Exception as sifac_exception:
+            LOGGER.error(
+                "Can't close Sifac connection: {0!s}".format(sifac_exception))
 
-    def _build_filtered_query(self, column, filters):
+    @staticmethod
+    def _build_filtered_query(column, filters):
         """
         """
         query = []
@@ -55,7 +58,7 @@ class SifacDB(object):
         values = []
 
         try:
-            self._connect()
+            self.connect()
 
             iface = self.__conn.discover("RFC_READ_TABLE")
             iface.query_table.setValue(table)
@@ -68,10 +71,12 @@ class SifacDB(object):
             self.__conn.callrfc(iface)
             values = iface.DATA.value
 
-        except Exception as e:
-            logger.error("Can't execute query on Sifac DB: %s" % str(e))
+        except Exception as sifac_exception:
+            LOGGER.error(
+                "Can't execute query on Sifac DB: {0!s}"
+                .format(sifac_exception))
 
         finally:
-            self._close()
+            self.close()
 
         return values

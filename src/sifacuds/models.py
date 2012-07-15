@@ -9,13 +9,16 @@ import re
 from .db import SifacDB
 
 
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
 class SifacModel(object):
     """
     """
+
     _db_connection = SifacDB()
+    _table = ""
+    _columns = []
 
     @classmethod
     def _query_result(cls, *filters):
@@ -94,17 +97,14 @@ class Eotp(SifacModel):
         eotp_dict = {}
         matcher = re.compile(pattern) if pattern else None
         for value in cls._query_result(*filters):
-            try:
-                codes = value.split()
-                if len(codes) > 2:
-                    raise Exception()
-                if not matcher or matcher.match(codes[0]):
-                    cost_center_code = codes[1] if len(codes) > 1 else None
-                    eotp_dict[codes[0]] = cls(codes[0], cost_center_code)
-            except:
-                logger.warn(
-                    "Problem to split returning eotp {0}".format(value)
-                )
+            codes = value.split()
+            if len(codes) > 2:
+                LOGGER.warn(
+                    "Problem to split returning eotp {0}".format(value))
+                continue
+            if not matcher or matcher.match(codes[0]):
+                cost_center_code = codes[1] if len(codes) > 1 else None
+                eotp_dict[codes[0]] = cls(codes[0], cost_center_code)
         return eotp_dict
 
     @classmethod
@@ -114,17 +114,14 @@ class Eotp(SifacModel):
         eotp_list = []
         matcher = re.compile(pattern) if pattern else None
         for value in cls._query_result(*filters):
-            try:
-                codes = value.split()
-                if len(codes) > 2:
-                    raise Exception()
-                if not matcher or matcher.match(codes[0]):
-                    cost_center_code = codes[1] if len(codes) > 1 else None
-                    eotp_list.append(cls(codes[0], cost_center_code))
-            except:
-                logger.warn(
-                    "Problem to split returning eotp {0}".format(value)
-                )
+            codes = value.split()
+            if len(codes) > 2:
+                LOGGER.warn(
+                    "Problem to split returning eotp {0}".format(value))
+                continue
+            if not matcher or matcher.match(codes[0]):
+                cost_center_code = codes[1] if len(codes) > 1 else None
+                eotp_list.append(cls(codes[0], cost_center_code))
         return eotp_list
 
     def __repr__(self):
