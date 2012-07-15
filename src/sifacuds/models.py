@@ -221,7 +221,7 @@ class FunctionalDomain(SifacModel):
             if not matcher or matcher.match(functional_domain_code):
                 funcdom_dict[functional_domain_code] = cls(
                     functional_domain_code,
-                    ''.join(splitted_result[1:]).decode('iso-8859-15')
+                    ' '.join(splitted_result[1:]).decode('iso-8859-15')
                 )
         return funcdom_dict
 
@@ -237,7 +237,7 @@ class FunctionalDomain(SifacModel):
             if not matcher or matcher.match(functional_domain_code):
                 funcdom_list.append(cls(
                     functional_domain_code, 
-                    ''.join(splitted_result[1:]).decode('iso-8859-15')
+                    ' '.join(splitted_result[1:]).decode('iso-8859-15')
                 ))
         return funcdom_list
 
