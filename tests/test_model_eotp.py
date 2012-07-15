@@ -17,7 +17,7 @@ def expect_from(values):
     """
     """
     return [value for value in (value.split() for value in values) if
-        len(value) < 3]
+            len(value) < 3]
 
 
 values_from_sifac = [
@@ -90,20 +90,16 @@ test_data = (
             'M11MD131CLAVP           MED5FCFI',
             'M11MD132BOURC           MED5FCFI',
             'M11MD133GICQU           MED5FCFI',
-            'M11MD134ARMSP           MED5FCFI'
-        ])
-    },
-    {'filters': ('V99%', ), 'pattern': '.*6$', 
+            'M11MD134ARMSP           MED5FCFI'])},
+    {'filters': ('V99%', ), 'pattern': '.*6$',
         'from_sifac': values_from_sifac,
         'expected': expect_from([
             'V99N0016',
             'V99N0056                V308PSYN',
             'V99N0066                V312ESPN',
             'V99N0086                V312ESPN',
-            'V99N0096                V312ESPN'
-        ])
-    },
-    {'filters': ('R%'), 'pattern': '', 'from_sifac': values_from_sifac, 
+            'V99N0096                V312ESPN'])},
+    {'filters': ('R%'), 'pattern': '', 'from_sifac': values_from_sifac,
         'expected': expect_from([])},
     {'filters': (), 'pattern': '', 'from_sifac': [
         'M11MED92 ROUL           MED5FCFI'], 'expected': expect_from([])},
@@ -121,8 +117,8 @@ class TestEotp(unittest.TestCase):
         """ Test retrieving a list of eotps
         """
         for data in test_data:
-            result = Eotp.get_list(filters=data.items(), 
-                pattern=data['pattern'])
+            result = Eotp.get_list(
+                filters=data.items(), pattern=data['pattern'])
             self.assertIsInstance(result, type([]))
             for eotp, codes in zip(result, data['expected']):
                 self.assertIsInstance(eotp, Eotp)
@@ -137,8 +133,8 @@ class TestEotp(unittest.TestCase):
         """ Test retrieving a dict of eotps
         """
         for data in test_data:
-            result = Eotp.get_dict(filters=data.items(),
-                    pattern=data['pattern'])
+            result = Eotp.get_dict(
+                filters=data.items(), pattern=data['pattern'])
             self.assertIsInstance(result, type({}))
             for key_code, codes in izip(sorted(result), data['expected']):
                 eotp = result[key_code]

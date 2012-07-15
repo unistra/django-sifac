@@ -22,11 +22,11 @@ class TestSifacDB(unittest.TestCase):
             {'column': 'Test1', 'filters': ('TEST1%1', 'TEST2%1', 'TEST3%1'),
                 'expected': [
                     "Test1 LIKE 'TEST1%1'", 'OR', "Test1 LIKE 'TEST2%1'", 'OR',
-                    "Test1 LIKE 'TEST3%1'"]}, 
+                    "Test1 LIKE 'TEST3%1'"]},
             {'column': 'Test2', 'filters': (), 'expected': []},
             {'column': 'Test3', 'filters': ('TEST4%1', ), 'expected': [
                 "Test3 LIKE 'TEST4%1'"]}
         ]
         for data in test_data:
-            self.assertEqual(self.sifac_db._build_filtered_query(data['column'],
-                data['filters']), data['expected'])
+            self.assertEqual(self.sifac_db._build_filtered_query(
+                data['column'], data['filters']), data['expected'])

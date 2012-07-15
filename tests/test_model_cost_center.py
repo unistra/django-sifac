@@ -126,16 +126,17 @@ values_from_sifac = [
 test_data = (
     {'filters': (), 'pattern': '', 'from_sifac': values_from_sifac,
         'expected': values_from_sifac},
-    {'filters': ('SCD%', 'SEG%'), 'pattern': '', 
-        'from_sifac': values_from_sifac, 'expected': ['SCD2API', 'SCD2BPI', 
-            'SCD2CPI', 'SCD2DPI', 'SCD8BIBA', 'SCD8BIBB', 'SCD8SAN1', 
-            'SCD8SAN2', 'SEG3LCC', 'SEG3MR1', 'SEG3MR12', 'SEG3MR31']},
-    {'filters': ('R%', ), 'pattern': 'R[0-9]{3}[A-Z]{4}[0-9]{2}', 
+    {'filters': ('SCD%', 'SEG%'), 'pattern': '',
+        'from_sifac': values_from_sifac, 'expected': [
+            'SCD2API', 'SCD2BPI', 'SCD2CPI', 'SCD2DPI', 'SCD8BIBA', 'SCD8BIBB',
+            'SCD8SAN1', 'SCD8SAN2', 'SEG3LCC', 'SEG3MR1', 'SEG3MR12',
+            'SEG3MR31']},
+    {'filters': ('R%', ), 'pattern': 'R[0-9]{3}[A-Z]{4}[0-9]{2}',
         'from_sifac': values_from_sifac, 'expected': [
             'R101SEGE04', 'R309EOTE03', 'R309EOTE04', 'R309EOTE05',
-            'R309EOTE06', 'R309EOTE07', 'R309EOTE08', 'R309EOTE09', 
+            'R309EOTE06', 'R309EOTE07', 'R309EOTE08', 'R309EOTE09',
             'R309EOTE10', 'R309EOTE11', 'R316CHME02', 'R316CHME05']},
-    {'filters': ('LALA%1'), 'pattern': '', 'from_sifac': values_from_sifac, 
+    {'filters': ('LALA%1'), 'pattern': '', 'from_sifac': values_from_sifac,
         'expected': []},
     {'filters': (), 'pattern': '', 'from_sifac': [], 'expected': []}
 )
@@ -150,8 +151,8 @@ class TestCostCenter(unittest.TestCase):
         """ Test retrieving a list of cost centers
         """
         for data in test_data:
-            result = CostCenter.get_list(filters=data.items(), 
-                pattern=data['pattern'])
+            result = CostCenter.get_list(
+                filters=data.items(), pattern=data['pattern'])
             self.assertIsInstance(result, type([]))
             for cost_center, code in izip(result, data['expected']):
                 self.assertIsInstance(cost_center, CostCenter)
@@ -162,8 +163,8 @@ class TestCostCenter(unittest.TestCase):
         """ Test retrieving a dict of cost centers
         """
         for data in test_data:
-            result = CostCenter.get_dict(filters=data.items(),
-                    pattern=data['pattern'])
+            result = CostCenter.get_dict(
+                filters=data.items(), pattern=data['pattern'])
             self.assertIsInstance(result, type({}))
             for key_code, code in zip(sorted(result), data['expected']):
                 cost_center = result[key_code]

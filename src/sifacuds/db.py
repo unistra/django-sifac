@@ -20,8 +20,11 @@ class SifacDB(object):
         """ Connection to SIFAC """
         if self.__conn is None:
             try:
-                self.__conn = saprfc.conn(ashost=settings.ASHOST, sysnr=settings.SYSNR, client=settings.CLIENT,
-                    user=settings.USER, passwd=settings.PASSWF, trace=0)
+                self.__conn = saprfc.conn(
+                    ashost=settings.ASHOST, sysnr=settings.SYSNR,
+                    client=settings.CLIENT, user=settings.USER,
+                    passwd=settings.PASSWF, trace=0
+                )
                 self.__conn.connect()
             except Exception as e:
                 logger.critical("Can't connect to Sifac DB: %s" % str(e))
@@ -62,7 +65,7 @@ class SifacDB(object):
             if query:
                 iface.OPTIONS.setValue(query)
 
-            self.__conn.callrfc( iface )
+            self.__conn.callrfc(iface)
             values = iface.DATA.value
 
         except Exception as e:

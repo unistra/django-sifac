@@ -133,13 +133,13 @@ class Eotp(SifacModel):
     def __str__(self):
         return '{0.code}{1}'.format(
             self, '' if not self.cost_center else ' ({0.code})'
-                .format(self.cost_center)
+            .format(self.cost_center)
         )
 
     def __unicode__(self):
         return u'{0.code}{1}'.format(
             self, '' if not self.cost_center else u' ({0.code})'
-                .format(self.cost_center)
+            .format(self.cost_center)
         )
 
 
@@ -166,7 +166,7 @@ class Fund(SifacModel):
             fund_code = splitted_result[0]
             if not matcher or matcher.match(fund_code):
                 fund_dict[fund_code] = cls(
-                    fund_code, 
+                    fund_code,
                     ' '.join(splitted_result[1:]).decode('iso-8859-15')
                 )
         return fund_dict
@@ -182,7 +182,7 @@ class Fund(SifacModel):
             fund_code = splitted_result[0]
             if not matcher or matcher.match(fund_code):
                 fund_list.append(cls(
-                    fund_code, 
+                    fund_code,
                     ' '.join(splitted_result[1:]).decode('iso-8859-15')
                 ))
         return fund_list
@@ -236,7 +236,7 @@ class FunctionalDomain(SifacModel):
             functional_domain_code = splitted_result[0]
             if not matcher or matcher.match(functional_domain_code):
                 funcdom_list.append(cls(
-                    functional_domain_code, 
+                    functional_domain_code,
                     ' '.join(splitted_result[1:]).decode('iso-8859-15')
                 ))
         return funcdom_list
