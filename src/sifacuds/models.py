@@ -1,6 +1,17 @@
 # -*- coding: utf-8 -*-
 
 """
+
+sifac.models
+============
+
+All the models to communicate with the sifac application are defined here:
+
+    * CostCenter
+    * Eotp
+    * Fund
+    * FunctionalDomain
+
 """
 
 import logging
@@ -13,7 +24,21 @@ LOGGER = logging.getLogger(__name__)
 
 
 class SifacModel(object):
-    """
+    """ Base model for Sifac models. All models define here must subclass
+    this model
+
+    .. py:attribute:: _db_connection
+
+        the connection to the SIFAC sap client
+
+    .. py:attribute:: _table
+
+        the table to querying on (this must be defined in subclasses)
+
+    .. py:attribute:: _columns
+
+        a list of columns that contains the wanted data (this must be defined
+        in subclasses)
     """
 
     _db_connection = SifacDB()
@@ -21,15 +46,39 @@ class SifacModel(object):
     _columns = []
 
     @classmethod
-    def _query_result(cls, *filters):
+    def _query_result(cls, filters):
+        """
+        Use the SIFAC connection to execute query and give the result back
+
+            :param filters: SIFAC filters to filter data
+            :type filters: tuple of strings
+            :rtype: a list of strings
+
+        """
         return cls._db_connection.query(cls._table, cls._columns, *filters)
 
     @classmethod
     def __get_structured_informations(cls, filters, pattern, data_structure):
+        """
+        Arrange data retrieved from a SIFAC database query and give the result
+        back as the wanted data structure
+
+            :param filters: SIFAC filters to filter data directly with the
+            query
+            :type filters: tuple of strings
+            :param pattern: a pattern to filter values retrieved from query
+            :type pattern: string
+            :data_structure: the data structure type to return
+            :type data_structure: iterable (list or dict for the moment)
+            :raises: NotImplementedError when the type of data structure wanted
+            isn't yet available
+            :rtype: iterable
+
+        """
         model_structure = data_structure()
         matcher = re.compile(pattern) if pattern else None
         separator_pattern = re.compile('(?<=\S)(\s{2,})(?=\S)')
-        for value in cls._query_result(*filters):
+        for value in cls._query_result(filters):
             model_infos = [
                 column.decode('iso-8859-15') for column
                 in separator_pattern.split(value)
@@ -52,6 +101,19 @@ class SifacModel(object):
     @classmethod
     def get_dict(cls, filters=(), pattern=""):
         """
+        Query on SIFAC model and return a dict of data
+
+            :param filters: SIFAC filters to filter data directly with the
+            query
+            :type filters: tuple of strings
+            :param pattern: a pattern to filter values retrieved from query
+            :type pattern: string
+            :raises: NotImplementedError when using this method with the
+            SifacModel base class directly
+            :returns: a dictionnary with model instance id as key and the
+            instance as value
+            :rtype: dict
+
         """
         if cls.__name__ == 'SifacModel':
             raise NotImplementedError(
@@ -61,6 +123,17 @@ class SifacModel(object):
     @classmethod
     def get_list(cls, filters=(), pattern=""):
         """
+        Query on SIFAC model and return a dict of data
+
+            :param filters: SIFAC filters to filter data directly with the
+            query
+            :type filters: tuple of strings
+            :param pattern: a pattern to filter values retrieved from query
+            :type pattern: string
+            :raises: NotImplementedError when using this method with the
+            SifacModel base class directly
+            :rtype: list of instances
+
         """
         if cls.__name__ == 'SifacModel':
             raise NotImplementedError(
@@ -70,6 +143,20 @@ class SifacModel(object):
 
 class CostCenter(SifacModel):
     """
+    Model to manage cost centers
+
+        .. py:attribute:: code
+
+            the cost center code 
+
+        .. py:attribute:: _table
+
+            the table for cost centers (CSKS)
+
+        .. py:attribute:: _columns
+
+            the columns for cost center (KOSTL)
+
     """
 
     _table = "CSKS"
@@ -91,6 +178,24 @@ class CostCenter(SifacModel):
 
 class Eotp(SifacModel):
     """
+    Model to manage Eotp
+
+        .. py:attribute:: code
+
+            the eotp code
+
+        .. py:attribute:: cost_center
+
+            the cost center instance the eotp is attached (could be None)
+
+        .. py:attribute:: _table
+
+            the table for eotp (PRPS)
+
+        .. py:attribute:: _columns
+
+            the columns for eotp (POSID, FKSTL)
+
     """
 
     _table = "PRPS"
@@ -119,6 +224,24 @@ class Eotp(SifacModel):
 
 class Fund(SifacModel):
     """
+    Model to manage funds
+
+        .. py:attribute:: code
+
+            the fund code
+
+        .. py:attribute:: description
+
+            the fund description
+
+        .. py:attribute:: _table
+
+            the table for fund (FMFINT)
+
+        .. py:attribute:: _columns
+
+            the columns for fund (FINCODE, BEZEICH)
+
     """
 
     _table = "FMFINT"
@@ -141,6 +264,24 @@ class Fund(SifacModel):
 
 class FunctionalDomain(SifacModel):
     """
+    Model to manage functional domains
+
+        .. py:attribute:: code
+
+            the functional domain code
+
+        .. py:attribute:: description
+
+            the functional domain description
+
+        .. py:attribute:: _table
+
+            the table for functional domains (TFKBT)
+
+        .. py:attribute:: _columns
+
+            the columns for functional domains (FKBER, FKBTX)
+
     """
 
     _table = "TFKBT"
