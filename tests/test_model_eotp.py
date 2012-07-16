@@ -5,6 +5,7 @@
 
 import unittest
 from itertools import izip
+import re
 
 try:
     utils = __import__('utils')
@@ -16,8 +17,8 @@ from sifacuds.models import Eotp
 def expect_from(values):
     """
     """
-    return [value for value in (value.split() for value in values) if
-            len(value) < 3]
+    split_pattern = re.compile("(?<=\S)\s{2,}(?=\S)")
+    return [split_pattern.split(value) for value in values]
 
 
 values_from_sifac = [
@@ -90,7 +91,8 @@ test_data = (
             'M11MD131CLAVP           MED5FCFI',
             'M11MD132BOURC           MED5FCFI',
             'M11MD133GICQU           MED5FCFI',
-            'M11MD134ARMSP           MED5FCFI'])},
+            'M11MD134ARMSP           MED5FCFI',
+            'M11MED92 ROUL           MED5FCFI'])},
     {'filters': ('V99%', ), 'pattern': '.*6$',
         'from_sifac': values_from_sifac,
         'expected': expect_from([
@@ -101,8 +103,6 @@ test_data = (
             'V99N0096                V312ESPN'])},
     {'filters': ('R%'), 'pattern': '', 'from_sifac': values_from_sifac,
         'expected': expect_from([])},
-    {'filters': (), 'pattern': '', 'from_sifac': [
-        'M11MED92 ROUL           MED5FCFI'], 'expected': expect_from([])},
     {'filters': (), 'pattern': '', 'from_sifac': [],
         'expected': expect_from([])}
 )
