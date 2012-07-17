@@ -8,7 +8,7 @@ path = '{0}/src'.format(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(path)
 
 setup(
-    name = 'django-sifacuds',
+    name = 'Django-SIFAC',
     version = '0.2.0',
     packages = find_packages('src'),
     package_dir = {'': 'src'},
@@ -17,15 +17,11 @@ setup(
         'saprfc'
     ],
 
-    dependency_links =  [
-        'http://repodipory.u-strasbg.fr/lib/python'
-    ],
 
     author = 'Morgan Bohn',
     author_email = 'morgan.bohn@unistra.fr',
-    description = 'A SAP API for SIFAC UDS',
-    license = 'Other',
-    keywords = 'sifac sap django uds',
-    url = ''
-
+    description = 'A SAP API for SIFAC',
+    license = 'CeCILL-B',
+    keywords = 'sifac sap django',
+    url = 'https://github.com/unistra/django-sifac/'
 )
