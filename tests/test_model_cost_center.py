@@ -10,7 +10,7 @@ try:
     utils = __import__('utils')
 except ImportError:
     pass
-from sifacuds.models import CostCenter
+from sifac.models import CostCenter
 
 values_from_sifac = [
     'ART',

@@ -10,7 +10,7 @@ try:
     utils = __import__('utils')
 except ImportError:
     pass
-from sifacuds.models import FunctionalDomain
+from sifac.models import FunctionalDomain
 
 
 def expect_from(values):

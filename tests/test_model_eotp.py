@@ -11,7 +11,7 @@ try:
     utils = __import__('utils')
 except ImportError:
     pass
-from sifacuds.models import Eotp
+from sifac.models import Eotp
 
 
 def expect_from(values):

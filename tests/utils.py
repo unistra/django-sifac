@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-""" Utility functions for testing the sifacuds library
+""" Utility functions for testing the sifac library
 """
 
 import re
 import functools
-from sifacuds.db import SifacDB
+from sifac.db import SifacDB
 
 
 def fake_db_query(cls, table, columns, *data):

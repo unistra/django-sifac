@@ -10,7 +10,7 @@ try:
     utils = __import__('utils')
 except ImportError:
     pass
-from sifacuds.models import Fund
+from sifac.models import Fund
 
 
 def expect_from(values):
