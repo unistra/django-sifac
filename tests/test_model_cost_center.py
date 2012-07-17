@@ -5,12 +5,9 @@
 
 import unittest
 from itertools import izip
-
-try:
-    utils = __import__('utils')
-except ImportError:
-    pass
 from sifac.models import CostCenter
+
+utils = __import__('utils')
 
 values_from_sifac = [
     'ART',

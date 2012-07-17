@@ -6,12 +6,9 @@
 import unittest
 from itertools import izip
 import re
-
-try:
-    utils = __import__('utils')
-except ImportError:
-    pass
 from sifac.models import Eotp
+
+utils = __import__('utils')
 
 
 def expect_from(values):
