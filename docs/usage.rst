@@ -88,3 +88,10 @@ it to the SifacDB class as the conn parameter. ::
 
     sifac_db = SifacDB(conn=sifac_connection)
 
+Or directly with the models ::
+
+    from sifac.models import CostCenter, SifacModel
+
+    SifacModel.set_connection(sifac_connection)
+    cost_centers = CostCenter.get_list()
+

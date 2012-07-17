@@ -46,7 +46,7 @@ class SifacModel(object):
     _columns = []
 
     def __init__(self, *args, **kwargs):
-        super(SifacModel, self).__init__(*args, **kwargs)
+        super(SifacModel, self).__init__()
 
     @classmethod
     def _query_result(cls, filters):
@@ -142,6 +142,17 @@ class SifacModel(object):
             raise NotImplementedError(
                 "This method should not be called with the SifacModel class")
         return cls.__get_structured_informations(filters, pattern, list)
+
+    @classmethod
+    def set_connection(cls, connection):
+        """ 
+        Used to set the sifac connection
+
+            :param connection: the sifac connection instance
+            :type connection: a saprfc connection instance
+            
+        """
+        cls._db_connection = SifacDB(conn=connection)
 
 
 class CostCenter(SifacModel):

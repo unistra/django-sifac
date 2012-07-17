@@ -2,27 +2,27 @@
 Django-SIFAC API
 ================
 
-.. automodule:: sifacuds
+.. automodule:: sifac
 
 
-.. automodule:: sifacuds.models
+.. automodule:: sifac.models
 
-.. autoclass:: sifacuds.models.SifacModel
+.. autoclass:: sifac.models.SifacModel
     :members:
 
-.. autoclass:: sifacuds.models.CostCenter
+.. autoclass:: sifac.models.CostCenter
     :members:
 
-.. autoclass:: sifacuds.models.Eotp
+.. autoclass:: sifac.models.Eotp
     :members:
 
-.. autoclass:: sifacuds.models.Fund
+.. autoclass:: sifac.models.Fund
     :members:
 
-.. autoclass:: sifacuds.models.FunctionalDomain
+.. autoclass:: sifac.models.FunctionalDomain
     :members:
 
-.. automodule:: sifacuds.db
+.. automodule:: sifac.db
 
-.. autoclass:: sifacuds.db.SifacDB
+.. autoclass:: sifac.db.SifacDB
     :members:

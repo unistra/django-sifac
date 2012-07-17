@@ -11,7 +11,10 @@ Module to manage connection and query on Sifac database
 import logging
 import saprfc
 
-from django.conf import settings
+try:
+    from django.conf import settings
+except ImportError:
+    pass
 
 
 LOGGER = logging.getLogger(__name__)
@@ -33,16 +36,15 @@ class SifacDB(object):
                     client=settings.CLIENT, user=settings.USER,
                     passwd=settings.PASSWF, trace=0
                 )
-                self.__conn.connect()
             except Exception as sifac_exception:
                 LOGGER.critical(
                     "Can't connect to Sifac DB: {0!s}".format(sifac_exception))
+        self.__conn.connect()
 
     def close(self):
         """ Close connection from SIFAC """
         try:
             self.__conn.close()
-            self.__conn = None
         except Exception as sifac_exception:
             LOGGER.error(
                 "Can't close Sifac connection: {0!s}".format(sifac_exception))
