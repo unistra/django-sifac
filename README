@@ -4,6 +4,8 @@ Django-SIFAC
 
 This library is not really a django specific app for SIFAC but it's easy to use
 with Django.
+For the moment, data on cost centers, eotp, funds and functional domains is
+acessible, but only for reading, not writing
 
 Installation
 ------------
