@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+sifac.db
+========
+
+Module to manage connection and query on Sifac database
+"""
+
+
 import logging
 import saprfc
 
@@ -42,6 +50,13 @@ class SifacDB(object):
     @staticmethod
     def _build_filtered_query(column, filters):
         """
+        Build formatted filters for the query
+            
+            :param colum: the column to apply filters
+            :param filters: the filters to apply
+            :type filters: list or tuple
+            :rtype: list of formatted filters
+
         """
         query = []
         if filters:
@@ -53,7 +68,17 @@ class SifacDB(object):
         return query
 
     def query(self, table, columns, *filters):
-        """
+        """ 
+        Execute query on Sifac Database
+
+            :param table: the table to query on
+            :param columns: the columns value to get
+            :type colums: list or tuple
+            :param filters: the filters to apply to the query
+            :type filters: list or tuple
+            :returns: a list of formatted strings to split
+            :rtype: list of strings
+
         """
         values = []
 

@@ -45,6 +45,9 @@ class SifacModel(object):
     _table = ""
     _columns = []
 
+    def __init__(self, *args, **kwargs):
+        super(SifacModel, self).__init__(*args, **kwargs)
+
     @classmethod
     def _query_result(cls, filters):
         """
@@ -64,14 +67,14 @@ class SifacModel(object):
         back as the wanted data structure
 
             :param filters: SIFAC filters to filter data directly with the
-            query
+                query
             :type filters: tuple of strings
             :param pattern: a pattern to filter values retrieved from query
             :type pattern: string
             :data_structure: the data structure type to return
             :type data_structure: iterable (list or dict for the moment)
             :raises: NotImplementedError when the type of data structure wanted
-            isn't yet available
+                isn't yet available
             :rtype: iterable
 
         """
@@ -104,14 +107,14 @@ class SifacModel(object):
         Query on SIFAC model and return a dict of data
 
             :param filters: SIFAC filters to filter data directly with the
-            query
+                query
             :type filters: tuple of strings
             :param pattern: a pattern to filter values retrieved from query
             :type pattern: string
             :raises: NotImplementedError when using this method with the
-            SifacModel base class directly
+                SifacModel base class directly
             :returns: a dictionnary with model instance id as key and the
-            instance as value
+                instance as value
             :rtype: dict
 
         """
@@ -126,12 +129,12 @@ class SifacModel(object):
         Query on SIFAC model and return a dict of data
 
             :param filters: SIFAC filters to filter data directly with the
-            query
+                query
             :type filters: tuple of strings
             :param pattern: a pattern to filter values retrieved from query
             :type pattern: string
             :raises: NotImplementedError when using this method with the
-            SifacModel base class directly
+                SifacModel base class directly
             :rtype: list of instances
 
         """

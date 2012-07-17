@@ -1,11 +1,25 @@
-django-sifac
+============
+Django-SIFAC
 ============
 
 This library is not really a django specific app for SIFAC but it's easy to use
 with Django.
 
-Installation :
---------------
+Installation
+------------
 
-Integrate with your django app :
---------------------------------
+    pip install django-sifac
+
+
+Integrate with your django app
+------------------------------
+
+You need to add this lines to the settings file of your django project ::
+
+    ASHOST = '' #  Hostname to connect (i.e sap.host.com)
+    SYSNR = '' # System number to connect to (i.e '00')
+    CLIENT = '' # Client number logged in (i.e '500')
+    USER = '' # Username
+    PASSWF = '' # Password
+
+
