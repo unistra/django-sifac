@@ -2,7 +2,7 @@
 
 """
 
-sifac.models
+sifac.sap_models
 ============
 
 All the models to communicate with the sifac application are defined here:

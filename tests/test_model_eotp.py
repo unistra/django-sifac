@@ -6,7 +6,7 @@
 import unittest
 from itertools import izip
 import re
-from sifac.models import Eotp
+from sifac.sap_models import Eotp
 
 utils = __import__('utils')
 

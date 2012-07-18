@@ -13,7 +13,7 @@ Querying with models
 All of the models exposed on the models module works the same. You can retrieve
 data as lists or dicts. For example, for cost centers ::
     
-    from sifac.models import CostCenter, Fund
+    from sifac.sap_models import CostCenter, Fund
 
     cost_centers = CostCenter.get_list()
     funds = Fund.get_dict()
@@ -26,7 +26,7 @@ In some cases, we want to filter data directly with the database query.
 Querying on Sifac (SAP) with the Python saprfc library is not very efficient.
 To filter, we only use the "%" char ::
 
-    from sifac.models import Eotp
+    from sifac.sap_models import Eotp
 
     eotp = Eotp.get_dict(filters=('V99%', 'R301%'))
 
@@ -43,7 +43,7 @@ precaution because all of the tuples of a table will be loaded before the
 pattern will be applied. It can be a good idea to use global filters first and
 then to apply a pattern ::
 
-    from sifac.models import CostCenter
+    from sifac.sap_models import CostCenter
 
     cost_centers = CostCenter.get_dict(filters=('V99%'),
         pattern='V99[0-6]')
@@ -90,7 +90,7 @@ it to the SifacDB class as the conn parameter. ::
 
 Or directly with the models ::
 
-    from sifac.models import CostCenter, SifacModel
+    from sifac.sap_models import CostCenter, SifacModel
 
     SifacModel.set_connection(sifac_connection)
     cost_centers = CostCenter.get_list()

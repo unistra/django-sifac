@@ -5,7 +5,7 @@
 
 import unittest
 import fudge
-from sifac.models import SifacModel
+from sifac.sap_models import SifacModel
 from sifac.db import SifacDB
 
 

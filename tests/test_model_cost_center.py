@@ -5,7 +5,7 @@
 
 import unittest
 from itertools import izip
-from sifac.models import CostCenter
+from sifac.sap_models import CostCenter
 
 utils = __import__('utils')
 

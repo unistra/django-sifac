@@ -5,7 +5,7 @@
 
 import unittest
 from itertools import izip
-from sifac.models import Fund
+from sifac.sap_models import Fund
 
 utils = __import__('utils')
 
