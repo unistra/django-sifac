@@ -13,7 +13,7 @@ Querying with models
 All of the models exposed on the models module works the same. You can retrieve
 data as lists or dicts. For example, for cost centers ::
     
-    from sifac.sap_models import CostCenter, Fund
+    from sifac.sap.models import CostCenter, Fund
 
     cost_centers = CostCenter.get_list()
     funds = Fund.get_dict()
@@ -26,7 +26,7 @@ In some cases, we want to filter data directly with the database query.
 Querying on Sifac (SAP) with the Python saprfc library is not very efficient.
 To filter, we only use the "%" char ::
 
-    from sifac.sap_models import Eotp
+    from sifac.sap.models import Eotp
 
     eotp = Eotp.get_dict(filters=('V99%', 'R301%'))
 
@@ -43,7 +43,7 @@ precaution because all of the tuples of a table will be loaded before the
 pattern will be applied. It can be a good idea to use global filters first and
 then to apply a pattern ::
 
-    from sifac.sap_models import CostCenter
+    from sifac.sap.models import CostCenter
 
     cost_centers = CostCenter.get_dict(filters=('V99%'),
         pattern='V99[0-6]')
@@ -64,7 +64,7 @@ You can access to low level functionnalities on the SifacDB class directly.
 With an instance of the this class, querying on sifac database is possible if
 you know on which table and columns the data you wanted are located. ::
 
-    from sifac.db import SifacDB
+    from sifac.sap.db import SifacDB
 
     sifac_connection = SifacDB()
     results = sifac_connection.query("CSKS", ["KOSTL"], filters=('V99%'))
@@ -81,16 +81,16 @@ You need to create an instance of a sifac database connection yourself and pass
 it to the SifacDB class as the conn parameter. ::
 
     import saprfc
-    from sifac.db import SifacDB
+    from sifac.sap.db import SifacDB
 
     sifac_connection = saprfc.conn(ashost='my_host', sysnr='00',
         client='500', user='my_user', passwd='my_pass', trace=0)
 
-    sifac_db = SifacDB(conn=sifac_connection)
+    sifac.sap.db = SifacDB(conn=sifac_connection)
 
 Or directly with the models ::
 
-    from sifac.sap_models import CostCenter, SifacModel
+    from sifac.sap.models import CostCenter, SifacModel
 
     SifacModel.set_connection(sifac_connection)
     cost_centers = CostCenter.get_list()

@@ -5,8 +5,8 @@
 
 import unittest
 import fudge
-from sifac.sap_models import SifacModel
-from sifac.db import SifacDB
+from sifac.sap.models import SifacModel
+from sifac.sap.db import SifacDB
 
 
 class TestSifacModel(unittest.TestCase):

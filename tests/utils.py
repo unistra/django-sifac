@@ -5,7 +5,7 @@
 
 import re
 import functools
-from sifac.db import SifacDB
+from sifac.sap.db import SifacDB
 
 
 def fake_db_query(cls, table, columns, *data):

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-sifac.db
+sifac.sap.db
 ========
 
 Module to manage connection and query on Sifac database

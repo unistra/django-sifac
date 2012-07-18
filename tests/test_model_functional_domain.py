@@ -5,7 +5,7 @@
 
 import unittest
 from itertools import izip
-from sifac.sap_models import FunctionalDomain
+from sifac.sap.models import FunctionalDomain
 
 utils = __import__('utils')
 
