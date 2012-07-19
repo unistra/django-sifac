@@ -13,7 +13,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _tr
 
 
-class SAPPattern(models.Model):
+class SAPModelFilter(models.Model):
     """
     Define pattern to apply to a SAP query result
 
@@ -27,26 +27,32 @@ class SAPPattern(models.Model):
 
     """
 
-    sap_model = models.CharField(max_length=30,
-                                 verbose_name=_tr('SAP Pattern'), unique=True)
+    sap_model_name = models.CharField(max_length=30,
+                                      verbose_name=_tr('SAP Model name'),
+                                      unique=True)
     pattern = models.CharField(max_length=255, blank=True,
                                verbose_name=_tr('Pattern'))
 
     class Meta:
-        verbose_name = _tr('SAP Result filter')
-        ordering = ['sap_model']
+        verbose_name = _tr('SAP Model filter')
+        ordering = ['sap_model_name']
 
     def __unicode__(self):
-        return u'{O} filter'.format(self.sap_model)
+        return u'{0} filter'.format(self.sap_model_name)
+
+    def get_query_filter(self):
+        """
+        """
+        return self.filters.values_list('query_filter', flat=True)
 
 
-class SAPFilter(models.Model):
+class SAPQueryFilter(models.Model):
     """
     Define filters to apply to a SAP query
         
-        .. py:attribute:: sap_pattern
+        .. py:attribute:: sap_model
 
-            The SAPPattern instance
+            The SAPModelFilter instance
 
         .. py:attribute:: query_filter
 
@@ -54,15 +60,15 @@ class SAPFilter(models.Model):
 
     """
 
-    sap_pattern = models.ForeignKey(SAPPattern, related_name='filters',
-                                    verbose_name=_tr('SAP Pattern filter'))
+    sap_model = models.ForeignKey(SAPModelFilter, related_name='filters',
+                                  verbose_name=_tr('SAP Pattern filter'))
     query_filter = models.CharField(max_length=255, 
                                     verbose_name=_tr('SAP Query filter'))
 
     class Meta:
         verbose_name = _tr('SAP Query filter')
-        order_with_respect_to = 'sap_pattern'
+        order_with_respect_to = 'sap_model'
 
     def __unicode__(self):
-        return u'{0.query_filter} on {1.sap_model}'.format(
-            self, self.sap_pattern)
+        return u'{0.query_filter} on {1.sap_model_name}'.format(
+            self, self.sap_model)
