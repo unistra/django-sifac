@@ -10,7 +10,7 @@ on sifac database.
 
 
 from django.db import models
-from django.utils.trlation import ugettext_lazy as _tr
+from django.utils.translation import ugettext_lazy as _tr
 
 
 class SAPPattern(models.Model):
@@ -46,7 +46,7 @@ class SAPFilter(models.Model):
         
         .. py:attribute:: sap_pattern
 
-            The SAP Model Filter instance
+            The SAPPattern instance
 
         .. py:attribute:: query_filter
 
