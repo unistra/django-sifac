@@ -61,8 +61,8 @@ class SAPFilter(models.Model):
 
     class Meta:
         verbose_name = _tr('SAP Query filter')
-        order_with_respect_to = 'sap_model_filter'
+        order_with_respect_to = 'sap_pattern'
 
     def __unicode__(self):
         return u'{0.query_filter} on {1.sap_model}'.format(
-            self, self.sap_model_filter)
+            self, self.sap_pattern)
