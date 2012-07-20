@@ -40,10 +40,22 @@ class SAPModelFilter(models.Model):
     def __unicode__(self):
         return u'{0} filter'.format(self.sap_model_name)
 
-    def get_query_filter(self):
+    def get_query_filters(self):
         """
         """
         return self.filters.values_list('query_filter', flat=True)
+
+    def get_query_filters_as_string(self):
+        """
+        """
+        return  ', '.join(self.get_query_filters())
+    get_query_filters_as_string.short_description = _tr('Filters')
+
+    def human_sap_model_name(self):
+        """
+        """
+        return _tr(self.sap_model_name)
+    human_sap_model_name.short_description = _tr('SAP Model')
 
 
 class SAPQueryFilter(models.Model):
