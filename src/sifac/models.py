@@ -10,7 +10,9 @@ on sifac database.
 
 
 from django.db import models
-from django.utils.translation import ugettext_lazy as _tr
+from django.utils.translation import ugettext_lazy as _
+
+from .sap import models as sap_models
 
 
 class SAPModelFilter(models.Model):
@@ -28,13 +30,14 @@ class SAPModelFilter(models.Model):
     """
 
     sap_model_name = models.CharField(max_length=30,
-                                      verbose_name=_tr('SAP Model name'),
+                                      verbose_name=_('SAP Model name'),
                                       unique=True)
     pattern = models.CharField(max_length=255, blank=True,
-                               verbose_name=_tr('Pattern'))
+                               verbose_name=_('Pattern'))
 
     class Meta:
-        verbose_name = _tr('SAP Model filter')
+        verbose_name = _('SAP Model filter')
+        verbose_name_plural = _('SAP Model filters')
         ordering = ['sap_model_name']
 
     def __unicode__(self):
@@ -49,13 +52,13 @@ class SAPModelFilter(models.Model):
         """
         """
         return  ', '.join(self.get_query_filters())
-    get_query_filters_as_string.short_description = _tr('Filters')
+    get_query_filters_as_string.short_description = _('Filters')
 
     def human_sap_model_name(self):
         """
         """
-        return _tr(self.sap_model_name)
-    human_sap_model_name.short_description = _tr('SAP Model')
+        return getattr(sap_models, self.sap_model_name).verbose_name
+    human_sap_model_name.short_description = _('SAP Model')
 
 
 class SAPQueryFilter(models.Model):
@@ -73,12 +76,13 @@ class SAPQueryFilter(models.Model):
     """
 
     sap_model = models.ForeignKey(SAPModelFilter, related_name='filters',
-                                  verbose_name=_tr('SAP Pattern filter'))
+                                  verbose_name=_('SAP Pattern filter'))
     query_filter = models.CharField(max_length=255, 
-                                    verbose_name=_tr('SAP Query filter'))
+                                    verbose_name=_('SAP Query filter'))
 
     class Meta:
-        verbose_name = _tr('SAP Query filter')
+        verbose_name = _('SAP Query filter')
+        verbose_name_plural = _('SAP Query filters')
         order_with_respect_to = 'sap_model'
 
     def __unicode__(self):

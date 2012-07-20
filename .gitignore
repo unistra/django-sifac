@@ -2,3 +2,4 @@ _build
 .coverage
 *.egg-info
 *.pyc
+*.mo

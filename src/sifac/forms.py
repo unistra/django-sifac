@@ -5,7 +5,6 @@
 
 import types
 from django import forms
-from django.utils.translation import ugettext_lazy as _tr
 from .models import SAPModelFilter
 from .sap import models as sap_models
 
@@ -31,7 +30,8 @@ def get_sap_models():
 
     is_filtered = lambda member_name: member_name in already_filtered
 
-    return [(model_name, _tr(model_name)) for model_name in dir(sap_models)
+    return [(model_name, get_member(model_name).verbose_name) 
+            for model_name in dir(sap_models)
             if is_sifac_model(model_name) and not is_filtered(model_name)]
 
 
