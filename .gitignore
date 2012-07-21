@@ -1,5 +1,8 @@
 _build
 .coverage
+htmlcov
 *.egg-info
 *.pyc
 *.mo
+settings.py
+manage.py
