@@ -2,10 +2,12 @@
 
 import fudge
 from django.utils import unittest
-from sifac.forms import get_unfiltered_sap_models
-from sifac.forms import SAPModelFilterForm
-from sifac.models import SAPModelFilter
-from sifac.models import SAPQueryFilter
+from .forms import SAPModelFilterForm
+from .models import SAPModelFilter
+from .models import SAPQueryFilter
+from .service import SifacService
+from .service import SAPGetMethodService
+from .utils import get_sap_models
 
 
 class SAPModelFilterTestCase(unittest.TestCase):
@@ -109,3 +111,39 @@ class SAPModelFilterFormTestCase(unittest.TestCase):
             model_name_widget.choices], expected)
 
         eotp_filter.delete()
+
+
+class TestSifacService(unittest.TestCase):
+    """
+    """
+
+    def setUp(self):
+        self.dir_result = ['CostCenter', 'Eotp']
+
+    @fudge.patch('__builtin__.dir')
+    def test_service(self, fake_dir):
+        """
+        """
+        (fake_dir.expects_call().with_arg_count(1)\
+                .returns(self.dir_result))
+        service = SifacService()
+        for function in ('get_filtered_cost_center_dict',
+                         'get_filtered_cost_center_list',
+                         'get_filtered_eotp_dict',
+                         'get_filtered_eotp_list'):
+            self.assertIsInstance(getattr(service, function),
+                                  SAPGetMethodService)
+
+    @fudge.patch('__builtin__.dir')
+    def test_method(self, fake_dir):
+        (fake_dir.expects_call().with_arg_count(1)\
+                .returns(self.dir_result))
+        cost_center_model = get_sap_models().next()
+
+        method = SAPGetMethodService(cost_center_model, list)
+        result = method()
+        self.assertIsInstance(result, list)
+
+        method = SAPGetMethodService(cost_center_model, dict)
+        result = method()
+        self.assertIsInstance(result, dict)
