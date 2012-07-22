@@ -9,7 +9,7 @@ from .models import SAPModelFilter
 from .sap import models as sap_models
 
 
-def get_sap_models():
+def get_unfiltered_sap_models():
     """
     Used to define choices for the form select box. Possible values are the
     subclasses of the base sap model class that are not already filtered
@@ -42,7 +42,7 @@ class SAPModelFilterForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(SAPModelFilterForm, self).__init__(*args, **kwargs)
         self.fields['sap_model_name'].widget = forms.Select(
-                choices=get_sap_models())
+                choices=get_unfiltered_sap_models())
 
     class Meta:
         model = SAPModelFilter

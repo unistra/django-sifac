@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import fudge
 from django.utils import unittest
+from sifac.forms import get_unfiltered_sap_models
+from sifac.forms import SAPModelFilterForm
 from sifac.models import SAPModelFilter
 from sifac.models import SAPQueryFilter
 
@@ -58,3 +61,51 @@ class SAPModelFilterTestCase(unittest.TestCase):
         from django.db import IntegrityError
         self.assertRaises(IntegrityError, SAPModelFilter.objects.create,
                 sap_model_name="CostCenter", pattern="LA[0-9]{2}")
+
+
+class SAPModelFilterFormTestCase(unittest.TestCase):
+    """
+    """
+
+    def setUp(self):
+        self.dir_result = ['CostCenter', 'Eotp']
+
+
+    @fudge.patch('__builtin__.dir')
+    def test_get_sap_models(self, fake_dir):
+        """
+        """
+        from django.utils.translation import ugettext as _
+        expected = [('CostCenter', _('Cost center')), ('Eotp', _('Eotp'))]
+
+        # faking dir builtin with a returned value
+        (fake_dir.expects_call().with_arg_count(1)\
+                .returns(self.dir_result))
+
+        sap_models_form = SAPModelFilterForm()
+        model_name_widget = sap_models_form['sap_model_name'].field.widget
+        self.assertListEqual([
+            (model_name, _(model_trans)) for model_name, model_trans in 
+            model_name_widget.choices], expected)
+
+    @fudge.patch('__builtin__.dir')
+    def test_get_filtered_sap_models(self, fake_dir):
+        """
+        """
+        from django.utils.translation import ugettext as _
+        expected = [('CostCenter', _('Cost center'))]
+
+        # add a new SAP model filter object that should not appear in results
+        eotp_filter = SAPModelFilter.objects.create(sap_model_name='Eotp',
+                                                    pattern="")
+
+        (fake_dir.expects_call().with_arg_count(1)\
+                .returns(self.dir_result))
+
+        sap_models_form = SAPModelFilterForm()
+        model_name_widget = sap_models_form['sap_model_name'].field.widget
+        self.assertListEqual([
+            (model_name, _(model_trans)) for model_name, model_trans in
+            model_name_widget.choices], expected)
+
+        eotp_filter.delete()
