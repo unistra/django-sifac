@@ -3,10 +3,9 @@
 """
 """
 
-import types
 from django import forms
 from .models import SAPModelFilter
-from .sap import models as sap_models
+from .utils import get_sap_models
 
 
 def get_unfiltered_sap_models():
@@ -18,21 +17,10 @@ def get_unfiltered_sap_models():
     already_filtered = SAPModelFilter.objects.values_list('sap_model_name',
                                                           flat=True)
 
-    get_member = lambda member_name: getattr(sap_models, member_name)
-
-    is_a_class = lambda member_name: isinstance(get_member(member_name),
-                                                (types.TypeType,
-                                                 types.ClassType))
-
-    is_sifac_model = lambda member_name: is_a_class(member_name) and \
-            issubclass(get_member(member_name), sap_models.SifacModel) and \
-            member_name != 'SifacModel'
-
     is_filtered = lambda member_name: member_name in already_filtered
 
-    return [(model_name, get_member(model_name).verbose_name) 
-            for model_name in dir(sap_models)
-            if is_sifac_model(model_name) and not is_filtered(model_name)]
+    return [(model.__name__, model.verbose_name) for model in get_sap_models()
+            if not is_filtered(model.__name__)]
 
 
 class SAPModelFilterForm(forms.ModelForm):
