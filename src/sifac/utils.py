@@ -3,8 +3,11 @@
 """
 """
 
+import re
+import functools
 import types
 from .sap import models as sap_models
+from .sap.db import SifacDB
 
 
 def get_sap_models():
@@ -23,3 +26,32 @@ def get_sap_models():
 
     return (get_member(model_name) for model_name in dir(sap_models)
             if is_sifac_model(model_name))
+
+
+def fake_db_query(cls, table, columns, *data):
+    """ Fakes query on sifac database
+    """
+    data = dict(data)
+    filters = [
+        re.compile(filter_.replace('%', '.')) for filter_ in
+        data.get('filters', [])
+    ]
+    filtered_values = []
+    for value in data.get('from_sifac', []):
+        for filter_ in filters:
+            if filter_.match(value):
+                filtered_values.append(value)
+    if filters:
+        data['from_sifac'] = filtered_values
+    return data['from_sifac']
+
+
+def faking_query(func):
+    """ Replaces function that handles queries on sifac instance on the fly
+    before launching any function that needs to execute queries
+    """
+    @functools.wraps(func)
+    def wrapped(self):
+        setattr(SifacDB, 'query', fake_db_query)
+        return func(self)
+    return wrapped
