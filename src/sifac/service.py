@@ -62,7 +62,7 @@ class SAPGetMethodService(object):
             sap_model_filter = SAPModelFilter.objects.get(
                     sap_model_name=self.sap_model.__name__)
         except SAPModelFilter.DoesNotExist:
-            return sap_model_func()
+            return sap_model_func(filters=(), pattern="")
         else:
             return sap_model_func(filters=sap_model_filter.get_query_filters(),
                                   pattern=sap_model_filter.pattern) 
