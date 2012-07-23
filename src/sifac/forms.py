@@ -11,7 +11,12 @@ from .utils import get_sap_models
 def get_unfiltered_sap_models():
     """
     Used to define choices for the form select box. Possible values are the
-    subclasses of the base sap model class that are not already filtered
+    subclasses of the base sap model class that are not already filtered.
+    
+        :returns: formatted list for form choices including the model's name
+        and the translation of the model verbose name
+        :rtype: a list of tuples
+
     """
 
     already_filtered = SAPModelFilter.objects.values_list('sap_model_name',
@@ -25,6 +30,9 @@ def get_unfiltered_sap_models():
 
 class SAPModelFilterForm(forms.ModelForm):
     """
+    Form displayed in the admin GUI interfaxce. It adds a select widget on
+    SAP Model field to display only available SAP models that are not already
+    filtered.
     """
 
     def __init__(self, *args, **kwargs):

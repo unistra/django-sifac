@@ -29,7 +29,8 @@ def get_sap_models():
 
 
 def fake_db_query(cls, table, columns, *data):
-    """ Fakes query on sifac database
+    """
+    Fakes query on sifac database
     """
     data = dict(data)
     filters = [
@@ -47,8 +48,9 @@ def fake_db_query(cls, table, columns, *data):
 
 
 def faking_query(func):
-    """ Replaces function that handles queries on sifac instance on the fly
-    before launching any function that needs to execute queries
+    """
+    Replaces function that handles queries on sifac instance on the fly
+    before launching any function that needs to execute queries.
     """
     @functools.wraps(func)
     def wrapped(self):

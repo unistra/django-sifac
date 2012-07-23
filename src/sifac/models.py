@@ -19,9 +19,9 @@ class SAPModelFilter(models.Model):
     """
     Define pattern to apply to a SAP query result
 
-        .. py:attribute:: sap_model
+        .. py:attribute:: sap_model_name
             
-            The SAP model to consider
+            The SAP model's name to consider
 
         .. py:attribute:: pattern
 
@@ -45,17 +45,32 @@ class SAPModelFilter(models.Model):
 
     def get_query_filters(self):
         """
+        Returns query filters saved for this SAP model
+
+            :rtype: a list of string
+
         """
         return self.filters.values_list('query_filter', flat=True)
 
     def get_query_filters_as_string(self):
         """
+        Returns a formatted string of query filters saved for this SAP model.
+        Used in the admin GUI interface.
+
+            :returns: a list of query filters as a coma separated string
+            :rtype: string
+
         """
         return  ', '.join(self.get_query_filters())
     get_query_filters_as_string.short_description = _('Filters')
 
     def human_sap_model_name(self):
         """
+        Returns human localized readable words to describe SAP models. Used in
+        the administration GUI interface.
+
+            :rtype: string
+
         """
         return getattr(sap_models, self.sap_model_name).verbose_name
     human_sap_model_name.short_description = _('SAP Model')

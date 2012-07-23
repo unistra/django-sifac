@@ -13,7 +13,9 @@ from .utils import get_sap_models
 
 
 class SifacService(object):
-    """
+    """ Base class creating the whole sifac interface to communicate with the
+    sap library. It handles filters and pattern defined for the SAP models.
+    All of the methods are added dynamically on class creation.
     """
 
     AVAILABLE_ITERABLE = [list, dict]
@@ -32,19 +34,20 @@ class SifacService(object):
 
 class SAPGetMethodService(object):
     """
+    Represents the getter methods that will be added dynamically to the sifac
+    service.
+
+        .. py::attribute: model_name
+
+            The sap model name on which the method should pointed
+
+        .. py::attribute: iterable_type
+
+            The wanted type of the result
+
     """
 
     def __init__(self, sap_model, iterable_type):
-        """
-        .. py: attribute:: model_name
-            
-            The SAP model name
-
-        .. py: attribute:: iterable_type
-            
-            The iterable type to return
-
-        """
         self.sap_model = sap_model
         if isinstance(iterable_type, types.TypeType):
             self.iterable = iterable_type.__name__
