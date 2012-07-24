@@ -29,4 +29,31 @@ You need to add this lines to the settings file of your django project ::
     USER = '' # Username
     PASSWF = '' # Password
 
+If you want to use the SAP models filter application, you must activate the
+administration interface in the settings file of your project and add the sifac
+application in your INSTALLED_APPS setting ::
 
+    INSTALLED_APPS = (
+        ...,
+        django.contrib.admin,
+        ...,
+        sifac
+    )
+
+To create tables needed by the sifac application, syncing your database is
+necessary ::
+    
+    $> python manage.py syndb
+
+
+Basic usage
+-----------
+
+If you're using filters and pattern for your SAP Models (or not), it is really
+easy to use the library to retrieve filtered data. Filters and patterns for
+each SAP models can be created or updated in the admnistration interface ::
+
+    from sifac import service
+
+    sifac_service = SifacService()
+    cost_centers = sifac_service.get_filtered_cost_center_list()

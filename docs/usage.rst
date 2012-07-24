@@ -74,24 +74,32 @@ For example, this will return a list of filtered cost centers. The result of
 this function is a list of badly formatted strings due to the saprfc library. I
 really recommend to use high level models.
 
-Use without Django
-==================
+Use with the Sifac service
+==========================
 
-You need to create an instance of a sifac database connection yourself and pass
-it to the SifacDB class as the conn parameter. ::
+If you've already added filters for a SAP model, you can access directly to the
+filtered data with the sifac service instance. Here, we create some filters for
+the example ::
 
-    import saprfc
-    from sifac.sap.db import SifacDB
+    from sifac.models import SAPModelFilter, SAPQueryFilter
 
-    sifac_connection = saprfc.conn(ashost='my_host', sysnr='00',
-        client='500', user='my_user', passwd='my_pass', trace=0)
+    model_filter = SAPModelFilter.objects.create(sap_model_name='CostCenter')
+    query_filter = SAPQueryFilter.objects.create(sap_model=model_filter,
+        query_filter='PAIE1%')
 
-    sifac.sap.db = SifacDB(conn=sifac_connection)
+With the sifac Service, you can retrieve directly the filtered data ::
 
-Or directly with the models ::
+    from sifac.service import SifacService
 
-    from sifac.sap.models import CostCenter, SifacModel
+    sifac_service = SifacService()
+    filtered_cost_center = sifac_service.get_filtered_cost_center_list()
 
-    SifacModel.set_connection(sifac_connection)
-    cost_centers = CostCenter.get_list()
+Directly with the SAP models, you should do ::
+
+    from sifac.sap.models import CostCenter
+    from sifac.models import SAPModelFilter
+
+    sap_filters = SAPModelFilter.objects.get(sap_model_name='CostCenter')
+    filtered_cost_centers = CostCenter.get_list(
+        filters=sap_filters.get_query_filters(), pattern=sap_filters.pattern)
 
