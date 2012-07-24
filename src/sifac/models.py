@@ -54,8 +54,8 @@ class SAPModelFilter(models.Model):
 
     def get_query_filters_as_string(self):
         """
-        Returns a formatted string of query filters saved for this SAP model.
-        Used in the admin GUI interface.
+        Returns a formatted string of query filters saved for this SAP model.\
+                Used in the admin GUI interface.
 
             :returns: a list of query filters as a coma separated string
             :rtype: string
@@ -66,8 +66,8 @@ class SAPModelFilter(models.Model):
 
     def human_sap_model_name(self):
         """
-        Returns human localized readable words to describe SAP models. Used in
-        the administration GUI interface.
+        Returns human localized readable words to describe SAP models. Used \
+        in the administration GUI interface.
 
             :rtype: string
 

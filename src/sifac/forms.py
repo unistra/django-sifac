@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """
+sifac.forms
+===========
+
+Custom form for the administration GUI
 """
 
 from django import forms
@@ -10,11 +14,11 @@ from .utils import get_sap_models
 
 def get_unfiltered_sap_models():
     """
-    Used to define choices for the form select box. Possible values are the
+    Used to define choices for the form select box. Possible values are the \
     subclasses of the base sap model class that are not already filtered.
     
         :returns: formatted list for form choices including the model's name
-        and the translation of the model verbose name
+            and the translation of the model verbose name
         :rtype: a list of tuples
 
     """

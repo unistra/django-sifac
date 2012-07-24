@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """
+sifac.utils
+===========
+
+Utility functions and decorators for the whole library and tests
 """
 
 import re
@@ -49,8 +53,8 @@ def fake_db_query(cls, table, columns, *data):
 
 def faking_query(func):
     """
-    Replaces function that handles queries on sifac instance on the fly
-    before launching any function that needs to execute queries.
+    Decorator that replaces function that handles queries on sifac instance on
+    the fly before launching any function that needs to execute queries.
     """
     @functools.wraps(func)
     def wrapped(self):

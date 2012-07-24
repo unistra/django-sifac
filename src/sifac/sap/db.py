@@ -2,7 +2,7 @@
 
 """
 sifac.sap.db
-========
+============
 
 Module to manage connection and query on Sifac database
 """
