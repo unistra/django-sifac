@@ -90,7 +90,7 @@ class SifacModel(object):
         separator_pattern = re.compile('(?<=\S)(\s{2,})(?=\S)')
         for value in cls._query_result(filters):
             model_infos = [
-                column.decode('iso-8859-15') for column
+                column.decode('iso-8859-15').strip() for column
                 in separator_pattern.split(value)
                 if len(column) != column.count(' ')
             ]

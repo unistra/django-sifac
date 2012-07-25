@@ -8,8 +8,8 @@ path = '{0}/src'.format(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(path)
 
 setup(
-    name = 'Django-SIFAC',
-    version = '0.2.0',
+    name = 'django-sifac',
+    version = '0.2.1',
     packages = find_packages('src'),
     package_dir = {'': 'src'},
 
