@@ -1,22 +1,25 @@
 # -*- coding: utf-8 -*-
 
-import os
-import sys
-from setuptools import setup, find_packages
+from distutils.core import setup
 
-path = '{0}/src'.format(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(path)
 
 setup(
     name = 'django-sifac',
     version = '0.2.1',
-    packages = find_packages('src'),
+    packages = ['sifac', 'sifac.sap'],
     package_dir = {'': 'src'},
 
     install_requires = [
         'saprfc'
     ],
 
+    package_data = {
+        'sifac': [
+            'locale/*/LC_MESSAGES/*.po',
+            'locale/*/LC_MESSAGES/*.mo',
+        ]
+
+    },
 
     author = 'Morgan Bohn',
     author_email = 'morgan.bohn@unistra.fr',
