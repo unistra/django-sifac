@@ -5,7 +5,7 @@ from distutils.core import setup
 
 setup(
     name = 'django-sifac',
-    version = '0.2.1',
+    version = '0.2.2',
     packages = ['sifac', 'sifac.sap'],
     package_dir = {'': 'src'},
 

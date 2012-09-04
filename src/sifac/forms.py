@@ -41,7 +41,10 @@ class SAPModelFilterForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(SAPModelFilterForm, self).__init__(*args, **kwargs)
-        self.fields['sap_model_name'].widget = forms.Select(
+        if self.instance and self.instance.id:
+            self.fields['sap_model_name'].widget.attrs['readonly'] = True
+        else:
+            self.fields['sap_model_name'].widget = forms.Select(
                 choices=get_unfiltered_sap_models())
 
     class Meta:
