@@ -43,7 +43,7 @@ application in your INSTALLED_APPS setting ::
 To create tables needed by the sifac application, syncing your database is
 necessary ::
     
-    $> python manage.py syndb
+    $> python manage.py syncdb
 
 
 Basic usage
