@@ -32,9 +32,11 @@ class SifacDB(object):
         if self.__conn is None:
             try:
                 self.__conn = saprfc.conn(
-                    ashost=settings.ASHOST, sysnr=settings.SYSNR,
-                    client=settings.CLIENT, user=settings.USER,
-                    passwd=settings.PASSWF, trace=0
+                    ashost=settings.SIFAC['HOST'],
+                    sysnr=settings.SIFAC['SYSNR'],
+                    client=settings.SIFAC['CLIENT'],
+                    user=settings.SIFAC['USER'],
+                    passwd=settings.SIFAC['PASSWORD'], trace=0
                 )
             except Exception as sifac_exception:
                 LOGGER.critical(
@@ -53,7 +55,7 @@ class SifacDB(object):
     def _build_filtered_query(column, filters):
         """
         Build formatted filters for the query
-            
+
             :param colum: the column to apply filters
             :param filters: the filters to apply
             :type filters: list or tuple
@@ -70,7 +72,7 @@ class SifacDB(object):
         return query
 
     def query(self, table, columns, *filters):
-        """ 
+        """
         Execute query on Sifac Database
 
             :param table: the table to query on
