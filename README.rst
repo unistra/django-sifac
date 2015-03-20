@@ -23,11 +23,13 @@ Integrate with your django app
 
 You need to add this lines to the settings file of your django project ::
 
-    ASHOST = '' #  Hostname to connect (i.e sap.host.com)
-    SYSNR = '' # System number to connect to (i.e '00')
-    CLIENT = '' # Client number logged in (i.e '500')
-    USER = '' # Username
-    PASSWF = '' # Password
+    SIFAC = {
+        'HOST': '' #  Hostname to connect (i.e sap.host.com)
+        'SYSNR': '' # System number to connect to (i.e '00')
+        'CLIENT': '' # Client number logged in (i.e '500')
+        'USER': '' # Username
+        'PASSWORD': '' # Password
+    }
 
 If you want to use the SAP models filter application, you must activate the
 administration interface in the settings file of your project and add the sifac
@@ -57,3 +59,10 @@ each SAP models can be created or updated in the admnistration interface ::
 
     sifac_service = SifacService()
     cost_centers = sifac_service.get_filtered_cost_center_list()
+
+Launching tests
+---------------
+
+To launch tests, you should install django, saprfc and packages in file requirements-test.txt ::
+
+    $> python run_tests.py sifac
