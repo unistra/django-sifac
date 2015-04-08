@@ -2,6 +2,10 @@
 Django-SIFAC
 ============
 
+.. image:: https://landscape.io/github/unistra/django-sifac/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/unistra/django-sifac/master
+   :alt: Code Health
+
 Django-SIFAC is a API to interact with the financial repository called SIFAC
 and deployed in many french universities. It is not really a django specific
 app for SIFAC but it's easy to use with Django. For the moment, only data on 
