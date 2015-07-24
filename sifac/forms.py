@@ -49,4 +49,4 @@ class SAPModelFilterForm(forms.ModelForm):
 
     class Meta:
         model = SAPModelFilter
-        fields = '__all___'
+        fields = '__all__'
