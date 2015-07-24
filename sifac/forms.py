@@ -16,7 +16,7 @@ def get_unfiltered_sap_models():
     """
     Used to define choices for the form select box. Possible values are the \
     subclasses of the base sap model class that are not already filtered.
-    
+
         :returns: formatted list for form choices including the model's name
             and the translation of the model verbose name
         :rtype: a list of tuples
@@ -49,3 +49,4 @@ class SAPModelFilterForm(forms.ModelForm):
 
     class Meta:
         model = SAPModelFilter
+        fields = '__all___'
