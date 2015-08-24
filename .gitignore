@@ -6,4 +6,10 @@ htmlcov
 *.mo
 settings.py
 manage.py
-.dist/
+.dist
+.project
+.pydevproject
+.settings
+.tox
+build
+dist
