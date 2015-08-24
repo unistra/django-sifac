@@ -1,31 +1,32 @@
 # -*- coding: utf-8 -*-
 
-import os
-import sys
-from setuptools import setup, find_packages
+from setuptools import setup
+from setuptools import find_packages
 
-path = '{0}/src'.format(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(path)
 
 setup(
-    name = 'django-sifacuds',
-    version = '0.2.0',
-    packages = find_packages('src'),
-    package_dir = {'': 'src'},
+    name='django-sifac',
+    version='0.3.2',
+    packages=find_packages(),
 
-    install_requires = [
+    install_requires=[
         'saprfc'
     ],
 
-    dependency_links =  [
-        'http://repodipory.u-strasbg.fr/lib/python'
-    ],
+    package_data={
+        'sifac': [
+            'locale/*/LC_MESSAGES/*.po',
+            'locale/*/LC_MESSAGES/*.mo',
+        ]
 
-    author = 'Morgan Bohn',
-    author_email = 'morgan.bohn@unistra.fr',
-    description = 'A SAP API for SIFAC UDS',
-    license = 'Other',
-    keywords = 'sifac sap django uds',
-    url = ''
+    },
 
+    author='Morgan Bohn',
+    author_email='morgan.bohn@unistra.fr',
+    maintainer='Arnaud Grausem',
+    maintainer_email='arnaud.grausem@unistra.fr',
+    description='A SAP API for SIFAC',
+    license='CeCILL-B',
+    keywords='sifac sap django',
+    url='https://github.com/unistra/django-sifac/'
 )

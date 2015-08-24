@@ -5,9 +5,8 @@
 
 import unittest
 from itertools import izip
-from sifac.models import Fund
-
-utils = __import__('utils')
+from sifac.sap.models import Fund
+from sifac import utils
 
 
 def expect_from(values):

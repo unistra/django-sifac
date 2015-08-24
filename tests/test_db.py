@@ -2,7 +2,7 @@
 
 import unittest
 
-from sifac.db import SifacDB
+from sifac.sap.db import SifacDB
 
 
 class TestSifacDB(unittest.TestCase):

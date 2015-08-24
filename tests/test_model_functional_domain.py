@@ -5,9 +5,8 @@
 
 import unittest
 from itertools import izip
-from sifac.models import FunctionalDomain
-
-utils = __import__('utils')
+from sifac.sap.models import FunctionalDomain
+from sifac import utils
 
 
 def expect_from(values):

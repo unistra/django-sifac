@@ -1,0 +1,71 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-07-20 15:52+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+
+#: models.py:33
+msgid "SAP Model name"
+msgstr "Nom du modèle SAP"
+
+#: models.py:36
+msgid "Pattern"
+msgstr "Expression régulière"
+
+#: models.py:39
+msgid "SAP Model filter"
+msgstr "Filtre pour modèle SAP"
+
+#: models.py:40
+msgid "SAP Model filters"
+msgstr "Filtres pour modèle SAP"
+
+#: models.py:55
+msgid "Filters"
+msgstr "Filtres"
+
+#: models.py:61
+msgid "SAP Model"
+msgstr "Modèle SAP"
+
+#: models.py:79
+msgid "SAP Pattern filter"
+msgstr "Expression régulière pour filtre SAP"
+
+#: models.py:81 models.py:84
+msgid "SAP Query filter"
+msgstr "Filtre pour requête SAP"
+
+#: models.py:85
+msgid "SAP Query filters"
+msgstr "Filtres pour requête SAP"
+
+#: sap/models.py:185
+msgid "Cost center"
+msgstr "Centre de coût"
+
+#: sap/models.py:225
+msgid "Eotp"
+msgstr "eOTP"
+
+#: sap/models.py:272
+msgid "Fund"
+msgstr "Fond"
+
+#: sap/models.py:313
+msgid "Functional domain"
+msgstr "Domaine fonctionnel"

@@ -2,8 +2,8 @@
 
 """
 
-sifac.models
-============
+sifac.sap.models
+================
 
 All the models to communicate with the sifac application are defined here:
 
@@ -16,6 +16,7 @@ All the models to communicate with the sifac application are defined here:
 
 import logging
 import re
+from django.utils.translation import ugettext_lazy as _
 
 from .db import SifacDB
 
@@ -39,11 +40,17 @@ class SifacModel(object):
 
         a list of columns that contains the wanted data (this must be defined
         in subclasses)
+
+    .. py:attribute:: verbose_name
+
+        the translated model instance's name
+
     """
 
     _db_connection = SifacDB()
     _table = ""
     _columns = []
+    verbose_name = ""
 
     def __init__(self, *args, **kwargs):
         super(SifacModel, self).__init__()
@@ -83,7 +90,7 @@ class SifacModel(object):
         separator_pattern = re.compile('(?<=\S)(\s{2,})(?=\S)')
         for value in cls._query_result(filters):
             model_infos = [
-                column.decode('iso-8859-15') for column
+                column.decode('iso-8859-15').strip() for column
                 in separator_pattern.split(value)
                 if len(column) != column.count(' ')
             ]
@@ -175,6 +182,7 @@ class CostCenter(SifacModel):
 
     _table = "CSKS"
     _columns = ["KOSTL"]
+    verbose_name = _("Cost center")
 
     def __init__(self, code, *args, **kwargs):
         super(CostCenter, self).__init__(*args, **kwargs)
@@ -214,6 +222,7 @@ class Eotp(SifacModel):
 
     _table = "PRPS"
     _columns = ["POSID", "FKSTL"]
+    verbose_name = _("Eotp")
 
     def __init__(self, code, cost_center=None, *args, **kwargs):
         super(Eotp, self).__init__(*args, **kwargs)
@@ -260,6 +269,7 @@ class Fund(SifacModel):
 
     _table = "FMFINT"
     _columns = ["FINCODE", "BEZEICH"]
+    verbose_name = _("Fund")
 
     def __init__(self, code, description, *args, **kwargs):
         super(Fund, self).__init__(*args, **kwargs)
@@ -300,6 +310,7 @@ class FunctionalDomain(SifacModel):
 
     _table = "TFKBT"
     _columns = ["FKBER", "FKBTX"]
+    verbose_name = _("Functional domain")
 
     def __init__(self, code, description, *args, **kwargs):
         super(FunctionalDomain, self).__init__(*args, **kwargs)
